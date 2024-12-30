@@ -1,12 +1,13 @@
 <script lang="ts">
   import { marked } from 'marked';
-  import type { Checklist } from '$lib/types';
+  import type { Checklist, GlobalChecklist } from '$lib/types';
   import { onMount } from 'svelte';
 
   export let checklists: { aircraft: string; checklists: Checklist[] }[] = [] as any;
+  export let globalChecklists: GlobalChecklist[] = [] as any;
 
   let activeAircraft: string | null = null;
-  let activeChecklist: Checklist | null = null;
+  let activeChecklist: Checklist | GlobalChecklist | null = null;
   let markdownContent: string | null = null;
 
   const fetchMarkdown = async (file: string) => {
@@ -34,6 +35,12 @@
     markdownContent = await fetchMarkdown(checklist.file);
   };
 
+  const handleGlobalChecklistClick = async (checklist: GlobalChecklist) => {
+    activeChecklist = checklist;
+    markdownContent = await fetchMarkdown(checklist.file);
+  };
+
+
   const handleBackClick = () => {
     if (activeChecklist) {
       activeChecklist = null;
@@ -43,6 +50,15 @@
     }
   };
 
+  function goBack()  {
+    console.log('Going back...');
+    window.history.back();
+  }
+
+  function isGlobalChecklist(checklist: Checklist | GlobalChecklist): checklist is GlobalChecklist {
+    return (checklist as GlobalChecklist).type === 'global';
+  }
+
   onMount(() => {
     // Initially, do not load the first aircraft and checklist
   });
@@ -50,13 +66,19 @@
 </script>
 
 <div class="container mx-auto p-4">
-  {#if !activeAircraft}
+  {#if !activeAircraft && !activeChecklist}
     <!-- Aircraft selection -->
     <div class="flex space-x-4">
       {#each checklists as { aircraft }}
         <button class="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white rounded" on:click={() => handleAircraftClick(aircraft)}>
           {aircraft}
         </button>
+      {/each}
+
+      {#each globalChecklists as checklist}
+        <button class="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded" on:click={() => handleGlobalChecklistClick(checklist)}>
+          {checklist.name}
+        </button>  
       {/each}
     </div>
   {:else if !activeChecklist}
@@ -68,9 +90,11 @@
       <h2 class="text-2xl font-bold mb-2">{activeAircraft} Checklists</h2>
       <div class="flex flex-col space-y-2">
         {#each checklists.find(item => item.aircraft === activeAircraft)?.checklists || [] as checklist}
+        {#if checklist.hidden !== true}
           <button class="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded" on:click={() => handleChecklistClick(checklist)}>
             {checklist.name}
           </button>
+          {/if}
         {/each}
       </div>
     </div>
@@ -81,24 +105,48 @@
         Back to Checklists
       </button>
       <h2 class="text-2xl font-bold mb-2">{activeChecklist.name}</h2>
-      <div class="prose space-y-4">{@html markdownContent}</div>
-      {#if activeChecklist && activeChecklist.related}
+      <div class="space-y-4">{@html markdownContent}</div>
+      {#if activeChecklist.related !== undefined || (isGlobalChecklist(activeChecklist) && activeAircraft) || activeChecklist.showGlobal === true}
+        <!-- Display related checklists -->
+
         <div class="mt-4">
           <h3 class="uppercase font-bold mb-3">Related Checklists:</h3>
 
           <div class="flex flex-col space-y-2">
+            {#if activeChecklist.related}
+             
             {#each activeChecklist.related as relatedFile}
-              {#each checklists.find(c => c.aircraft === activeAircraft)?.checklists || [] as relatedChecklist}
-                {#if relatedChecklist.file === relatedFile}
-                  <button class="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded" on:click={() => handleChecklistClick(relatedChecklist)}>
-                    {relatedChecklist.name}
-                  </button>
-                {/if}
-              {/each}
+            
+            {#each checklists.find(c => c.aircraft === activeAircraft)?.checklists || [] as relatedChecklist}
+            
+            {#if relatedChecklist.file === relatedFile}
+            
+            <button class="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded" on:click={() => handleChecklistClick(relatedChecklist)}>
+              {relatedChecklist.name}
+            </button>
+            
+            {/if}
+            {/each}
+            {/each}
+            {/if}
+
+            {#if isGlobalChecklist(activeChecklist) && activeAircraft}
+                <button class="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded" on:click={() => goBack()}>
+                  Previous {activeAircraft} Checklist
+                </button>
+              {/if}
+            
+            {#each globalChecklists as checklist}
+              {#if activeChecklist?.showGlobal === true || (isGlobalChecklist(activeChecklist)&& checklist !== activeChecklist && !checklist.related ) }
+              <button class="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded" on:click={() => handleGlobalChecklistClick(checklist)}>
+                {checklist.name}
+              </button>
+              {/if}
             {/each}
           </div>
         </div>
       {/if}
     </div>
+    
   {/if}
 </div>
