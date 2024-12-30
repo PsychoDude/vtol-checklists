@@ -1,3 +1,4 @@
+
 <script lang="ts">
   import { marked } from 'marked';
   import type { Checklist } from '$lib/types';
@@ -39,7 +40,7 @@
       activeChecklist = null;
       markdownContent = null;
     } else {
-        activeAircraft = null;
+      activeAircraft = null;
     }
   };
 
@@ -73,12 +74,12 @@
       </button>
       <h2 class="text-2xl font-bold mb-2">{activeAircraft} Checklists</h2>
       <div class="flex flex-col space-y-2">
-        {#each checklists.find(item => item.aircraft === activeAircraft)?.checklists || [] as checklist}
+        {#each checklists.find(item => item.aircraft === activeAircraft)?.checklists || [] as Checklist}
           <button
             class="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded"
-            on:click={() => handleChecklistClick(checklist)}
+            on:click={() => handleChecklistClick(Checklist)}
           >
-            {checklist.name}
+            {Checklist.name}
           </button>
         {/each}
       </div>
@@ -89,7 +90,7 @@
         Back to Checklists
       </button>
       <h2 class="text-2xl font-bold mb-2">{activeChecklist.name}</h2>
-      <div class="prose" >
+      <div class="prose space-y-4">
         {@html markdownContent}
       </div>
     </div>
