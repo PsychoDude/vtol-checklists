@@ -3,7 +3,7 @@
   import type { Checklist } from '$lib/types';
   import { onMount } from 'svelte';
 
-  export let checklists: { aircraft: string; checklists: Checklist[] }[];
+  export let checklists: { aircraft: string; checklists: Checklist[] }[] = [] as any;
 
   let activeAircraft: string | null = null;
   let activeChecklist: Checklist | null = null;
@@ -46,46 +46,59 @@
   onMount(() => {
     // Initially, do not load the first aircraft and checklist
   });
+
 </script>
 
 <div class="container mx-auto p-4">
   {#if !activeAircraft}
+    <!-- Aircraft selection -->
     <div class="flex space-x-4">
       {#each checklists as { aircraft }}
-        <button
-          class="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white rounded"
-          on:click={() => handleAircraftClick(aircraft)}
-        >
+        <button class="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white rounded" on:click={() => handleAircraftClick(aircraft)}>
           {aircraft}
         </button>
       {/each}
     </div>
   {:else if !activeChecklist}
+    <!-- Checklist selection for the chosen aircraft -->
     <div class="mb-4">
       <button class="px-4 py-2 bg-gray-500 hover:bg-gray-700 text-white rounded mb-4" on:click={handleBackClick}>
         Back to Aircraft
       </button>
       <h2 class="text-2xl font-bold mb-2">{activeAircraft} Checklists</h2>
       <div class="flex flex-col space-y-2">
-        {#each checklists.find(item => item.aircraft === activeAircraft)?.checklists || [] as Checklist}
-          <button
-            class="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded"
-            on:click={() => handleChecklistClick(Checklist)}
-          >
-            {Checklist.name}
+        {#each checklists.find(item => item.aircraft === activeAircraft)?.checklists || [] as checklist}
+          <button class="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded" on:click={() => handleChecklistClick(checklist)}>
+            {checklist.name}
           </button>
         {/each}
       </div>
     </div>
   {:else}
+    <!-- Display of the selected checklist -->
     <div class="mb-4">
       <button class="px-4 py-2 bg-gray-500 hover:bg-gray-700 text-white rounded mb-4" on:click={handleBackClick}>
         Back to Checklists
       </button>
       <h2 class="text-2xl font-bold mb-2">{activeChecklist.name}</h2>
-      <div class="prose space-y-4">
-        {@html markdownContent}
-      </div>
+      <div class="prose space-y-4">{@html markdownContent}</div>
+      {#if activeChecklist && activeChecklist.related}
+        <div class="mt-4">
+          <h3 class="uppercase font-bold mb-3">Related Checklists:</h3>
+
+          <div class="flex flex-col space-y-2">
+            {#each activeChecklist.related as relatedFile}
+              {#each checklists.find(c => c.aircraft === activeAircraft)?.checklists || [] as relatedChecklist}
+                {#if relatedChecklist.file === relatedFile}
+                  <button class="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded" on:click={() => handleChecklistClick(relatedChecklist)}>
+                    {relatedChecklist.name}
+                  </button>
+                {/if}
+              {/each}
+            {/each}
+          </div>
+        </div>
+      {/if}
     </div>
   {/if}
 </div>

@@ -1,4 +1,5 @@
 export interface Checklist {
-    name: string;
-    file: string;
+	name: string
+	file: string
+	related?: string[]
 }
