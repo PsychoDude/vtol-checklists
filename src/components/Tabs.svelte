@@ -44,13 +44,7 @@
   };
 
   onMount(() => {
-    // Load the first aircraft and checklist on mount
-    if (checklists.length > 0) {
-      activeAircraft = checklists[0].aircraft;
-      if (checklists[0].checklists.length > 0) {
-        handleChecklistClick(checklists[0].checklists[0]);
-      }
-    }
+    // Initially, do not load the first aircraft and checklist
   });
 </script>
 
