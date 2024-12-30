@@ -14,6 +14,6 @@ export async function GET({ params }) {
       },
     });
   } catch (e) {
-    throw error(404, 'Not found');
+    error(404, 'Not found');
   }
 }
