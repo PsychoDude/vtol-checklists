@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    background-color: #1a202c;
+    color: #edf2f7;
+    font-size: 1.125rem; /* Increased base font size */
+}
+
+.container {
+    max-width: 560px;
+    margin-left: auto;
+    margin-right: auto;
+}

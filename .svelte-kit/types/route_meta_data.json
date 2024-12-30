@@ -1,0 +1,6 @@
+{
+	"/": [],
+	"/checklists/[file]": [
+		"src/routes/checklists/[file]/+server.js"
+	]
+}
