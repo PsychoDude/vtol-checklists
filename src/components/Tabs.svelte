@@ -85,7 +85,7 @@ const fetchMarkdown = async (file: string): Promise<string> => {
     } else  if (referrer && referrer !== activeChecklist?.name) {
       activeChecklist = findChecklist(referrer)
       markdownContent = await fetchMarkdown(referrer);
-    } else{
+    } else {
       activeAircraft = null;
       activeChecklist = null;
       referrer = null;
