@@ -2,15 +2,18 @@ export interface Checklist {
 	type: string
 	name: string
 	file: string
-	hidden: boolean
-	showGlobal: boolean
 	related?: string[]
+	showGlobal?: boolean
+	hidden?: boolean
 }
 
-export interface GlobalChecklist {
+export interface EmergencyChecklist {
 	type: string
 	name: string
 	file: string
-	related?: string[]
-	showGlobal?: boolean
+}
+
+export interface EmergencyChecklists {
+	aircraft: string
+	checklists: EmergencyChecklist[]
 }

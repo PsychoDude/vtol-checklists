@@ -23,3 +23,11 @@ ul {
 	list-style: disc;
 	padding-left: 1rem;
 }
+
+ol > li > ol {
+	list-style: lower-latin;
+}
+
+ol > li > ol > li > ol {
+	list-style: lower-roman;
+}

@@ -91,4 +91,33 @@ export const globalChecklists = [
 		file: 'lso-guidance.md',
 		related: ['wave-off.md'],
 	},
+	{
+		type: 'global',
+		name: 'Carrier Lights (Meatball) Img',
+		file: 'meatball.md',
+	},
+	{ type: 'global', name: 'Case 1 Diagram', file: 'case-1.md' },
+]
+
+export const emergencyChecklists = [
+	{
+		aircraft: 'F-45A',
+		checklists: [
+			{
+				type: 'emergency',
+				name: 'Engine Failure',
+				file: 'f45-emerg-enginefailure.md',
+			},
+			{
+				type: 'emergency',
+				name: 'Missile Impact',
+				file: 'f45-emerg-missileimpact.md',
+			},
+			{
+				type: 'emergency',
+				name: 'Flight Control Failure',
+				file: 'f45-emerg-flightcontrol.md',
+			},
+		],
+	},
 ]

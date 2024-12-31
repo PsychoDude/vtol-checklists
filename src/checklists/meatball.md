@@ -1,3 +1,5 @@
-# "Meatball"
+# Optical Landing System AKA "Meatball"
 
-<ResponsiveImage src="meatball.jpg" alt="A meatball on a plate." />
+![Carrier Lights](/images/carrier-lights.webp)
+
+<br>
