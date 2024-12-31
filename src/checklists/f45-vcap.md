@@ -1,0 +1,26 @@
+# F-45A VCAP Procedure
+
+> **NOTE:**
+
+<div style="border-left: 4px solid #a0e33b; padding-left: 15px; margin-bottom: 20px;">
+The VCAP button on the left is only enabled with a TWR of 1.04 or higher. VCAP is a mode that allows the pilot to easily match the speed of a moving ship for landing. The control system changes the inputs of the plane
+</div>
+
+<br>
+
+1. Throttle increases forward/back movement.
+2. Throttle should be CENTERED after pressing the VCAP button.
+3. Pushing the stick forward decreases altitude.
+4. Pulling the stick backward increases altitude.
+5. Moving the stick left or right moves the plane laterally, like a helicopter.
+6. Rudder rotates the orientation of the plane.
+
+<br>
+
+> **CAUTION:**
+
+<div style="border-left: 4px solid #d8222b; padding-left: 15px; margin-bottom: 20px;">
+    Throttle placement guidance: In order to hover the bar should be half filled and aligned with the middle notch (shown by the red arrow).  If the bar is filled higher/forward of the notch, the plane will move forward.  If the bar is lower than the notch, the plane will move backward.
+</div>
+
+<br>

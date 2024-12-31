@@ -12,3 +12,5 @@ The commands are as follows:
 -   You’re Slow - Speed Up. Increase throttle to compensate for lack of speed
 -   Wave Off! - WAVE OFF IMMEDIATELY, RE-ENTER A HOLDING PATTERN TO THE LEFT. SEE NEXT PAGE FOR PROCEDURES
 -   Bolter! - You’ve touched the deck but missed the wires - go around! SEE BELOW FOR PROCEDURE
+
+<br>
