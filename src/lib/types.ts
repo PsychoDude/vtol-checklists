@@ -2,8 +2,10 @@ export interface Checklist {
 	type: string
 	name: string
 	file: string
+	for?: string
 	related?: string[]
 	showGlobal?: boolean
+	showEmergencies?: boolean
 	hidden?: boolean
 }
 

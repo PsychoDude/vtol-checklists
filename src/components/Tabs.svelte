@@ -2,18 +2,19 @@
   import { marked } from 'marked';
   import type { Checklist, EmergencyChecklist } from '$lib/types';
   import { onMount } from 'svelte';
-  import { emergencyChecklists } from '$lib/checklists'
+  import { emergencyChecklists, globalPages } from '$lib/checklists'
 
 
   export let checklists: { aircraft: string; checklists: Checklist[] }[] = [] as any;
-  export let globalChecklists: Checklist[] = [] as any;
+  export let globalCarrierChecklists: Checklist[] = [] as any;
+
 
   let activeAircraft: string | null = null;
   let activeChecklist: Checklist | null = null;
   let markdownContent: string | Promise<string> | null = null;
   let referrer: string | null = null; 
 
-const fetchMarkdown = async (file: string): Promise<string> => { // Added : Promise<string>
+const fetchMarkdown = async (file: string): Promise<string> => { 
     try {
       const response = await fetch(`/checklists/${file}`);
       if (!response.ok) {
@@ -27,7 +28,7 @@ const fetchMarkdown = async (file: string): Promise<string> => { // Added : Prom
       return html;
     } catch (error) {
       console.error('Error fetching markdown:', error);
-      return '<p>Failed to load checklist.</p>'; // This is a string!
+      return '<p>Failed to load checklist.</p>';
     }
 };
 
@@ -45,7 +46,17 @@ const fetchMarkdown = async (file: string): Promise<string> => { // Added : Prom
   };
 
   const handleGlobalChecklistClick = async (checklist: Checklist) => {
-    if ( activeChecklist?.type !== 'global') referrer = activeChecklist?.file || null
+    switch (true) {
+      case (activeChecklist?.type === 'page' && activeAircraft === null):
+        referrer = activeChecklist?.file || null
+        break;
+      case (activeChecklist?.type !== 'global' && activeAircraft !== null):
+        referrer = activeChecklist?.file || null
+        break;
+      default:
+        break;
+    }
+    
     activeChecklist = checklist;
     markdownContent = await fetchMarkdown(checklist.file);
   };
@@ -55,13 +66,29 @@ const fetchMarkdown = async (file: string): Promise<string> => { // Added : Prom
     markdownContent = await fetchMarkdown(checklist.file);
   };
 
+  const handleGlobalPageClick = async (page: Checklist) => {
+    activeChecklist = page;
+    console.log(page)
+    markdownContent = await fetchMarkdown(page.file);
+  };
 
-  const handleBackClick = () => {
-    if (activeChecklist) {
+  const handleBackClick = async () => {
+    console.log(referrer, activeChecklist?.file)
+      if (referrer && referrer === activeChecklist?.file) {
+      console.log('same referrer')
+      referrer = null;
       activeChecklist = null;
-      markdownContent = null;
-    } else {
+    } else if (activeChecklist && referrer && activeAircraft === null) {
+      console.log('different referrer')
+      activeChecklist = findChecklist(referrer)
+      markdownContent = await fetchMarkdown(referrer);
+    } else  if (referrer && referrer !== activeChecklist?.name) {
+      activeChecklist = findChecklist(referrer)
+      markdownContent = await fetchMarkdown(referrer);
+    } else{
       activeAircraft = null;
+      activeChecklist = null;
+      referrer = null;
     }
   };
 
@@ -75,8 +102,9 @@ const fetchMarkdown = async (file: string): Promise<string> => { // Added : Prom
   }
 
 function findChecklist(filename: string): Checklist | null {
-  const fixedGlobalChecklists = { aircraft: 'All', checklists: globalChecklists };
-  const allChecklists = checklists.concat(fixedGlobalChecklists);
+  const fixedGlobalChecklists = { aircraft: 'All', checklists: globalCarrierChecklists };
+  const fixedGlobalPages = { aircraft: 'All', checklists: globalPages };
+  const allChecklists = checklists.concat(fixedGlobalChecklists).concat(fixedGlobalPages);
 
   for (const aircraftChecklists of allChecklists) { //Iterate through the array of objects
     for (const checklist of aircraftChecklists.checklists) { //Access checklists property of each object
@@ -108,9 +136,9 @@ function findChecklist(filename: string): Checklist | null {
         </button>
       {/each}
 
-      {#each globalChecklists as checklist}
-        <button class="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded" on:click={() => handleGlobalChecklistClick(checklist)}>
-          {checklist.name}
+      {#each globalPages as globalpage}
+        <button class="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded" on:click={() => handleGlobalPageClick(globalpage)}>
+          {globalpage.name}
         </button>  
       {/each}
     </div>
@@ -146,7 +174,7 @@ function findChecklist(filename: string): Checklist | null {
       </button>
       <h2 class="text-2xl font-bold mb-2">{activeChecklist.name}</h2>
       <div class="space-y-4">{@html markdownContent}</div>
-      {#if activeChecklist.related !== undefined || (isGlobalChecklist(activeChecklist) && activeAircraft) || activeChecklist.showGlobal === true}
+      {#if activeChecklist.related !== undefined || (isGlobalChecklist(activeChecklist) && activeAircraft) || activeChecklist.showGlobal === true || activeChecklist.type === 'emergency' || activeChecklist.showEmergencies}
         <!-- Display related checklists -->
 
         <div class="mt-4">
@@ -171,21 +199,44 @@ function findChecklist(filename: string): Checklist | null {
             {/if}
 
             {#if isGlobalChecklist(activeChecklist) && activeAircraft && referrer !== null}
-              {console.log('referrer:', referrer)}
                 <button class="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded" on:click={() => goBack(referrer)}>
                   Previous {activeAircraft} Checklist
                 </button>
             {/if}
             
-            {#each globalChecklists as checklist}
+            {#each globalCarrierChecklists as checklist}
               {#if activeChecklist?.showGlobal === true || (isGlobalChecklist(activeChecklist)&& checklist !== activeChecklist && !checklist.related ) }
               <button class="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded" on:click={() => handleGlobalChecklistClick(checklist)}>
                 {checklist.name}
               </button>
               {/if}
             {/each}
+
+            {#if activeChecklist.type === 'emergency'}
+              {#each (emergencyChecklists.find(item => item.aircraft === activeAircraft)?.checklists || []) as emergencychecklist}
+                {#if emergencychecklist !== activeChecklist}
+                <button class="px-4 py-2 bg-red-500 hover:bg-red-700 text-white rounded" on:click={() => handleEmergencyChecklistClick(emergencychecklist)}>
+                  {emergencychecklist.name}
+                </button>
+                {/if}
+              {/each}
+            {:else if activeAircraft && activeChecklist.showEmergencies}
+            {#each (emergencyChecklists.find(item => item.aircraft === activeAircraft)?.checklists || []) as emergencychecklist}
+              <button class="px-4 py-2 bg-red-500 hover:bg-red-700 text-white rounded" on:click={() => handleEmergencyChecklistClick(emergencychecklist)}>
+                {emergencychecklist.name}
+              </button>
+            {/each}
+            {/if}
           </div>
         </div>
+      {:else if activeChecklist?.type === 'page' && activeChecklist?.for === 'carrier'}
+      <div class="flex flex-col space-y-2">
+        {#each globalCarrierChecklists as checklist}
+        <button class="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded" on:click={() => handleGlobalChecklistClick(checklist)}>
+          {checklist.name}
+        </button>
+        {/each}
+      </div>
       {/if}
     </div>
     

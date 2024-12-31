@@ -6,9 +6,15 @@ export const checklists = [
 				type: 'aircraft',
 				name: 'Startup',
 				file: 'f45-startup.md',
-				related: ['f45-takeoff-runway.md'],
+				related: [
+					'f45-takeoff-runway.md',
+					'f45-takeoff-CATOBAR.md',
+					'f45-short-takeoff.md',
+					'f45-vcap.md',
+				],
 				hidden: false,
 				showGlobal: false,
+				showEmergencies: false,
 			},
 			{
 				type: 'aircraft',
@@ -16,6 +22,7 @@ export const checklists = [
 				file: 'f45-takeoff-runway.md',
 				hidden: false,
 				showGlobal: false,
+				showEmergencies: true,
 			},
 			{
 				type: 'aircraft',
@@ -23,6 +30,7 @@ export const checklists = [
 				file: 'f45-landing-runway.md',
 				hidden: false,
 				showGlobal: false,
+				showEmergencies: true,
 			},
 			{
 				type: 'aircraft',
@@ -30,6 +38,7 @@ export const checklists = [
 				file: 'f45-takeoff-CATOBAR.md',
 				hidden: false,
 				showGlobal: false,
+				showEmergencies: true,
 			},
 			{
 				type: 'aircraft',
@@ -38,6 +47,7 @@ export const checklists = [
 				related: ['f45-landing-CATOBAR.md'],
 				hidden: false,
 				showGlobal: true,
+				showEmergencies: false,
 			},
 			{
 				type: 'aircraft',
@@ -46,6 +56,7 @@ export const checklists = [
 				related: ['f45-landing-CATOBAR-preface.md'],
 				hidden: true,
 				showGlobal: true,
+				showEmergencies: true,
 			},
 			{
 				type: 'aircraft',
@@ -54,22 +65,24 @@ export const checklists = [
 				related: ['f45-short-takeoff.md', 'f45-vtol-landing.md'],
 				hidden: false,
 				showGlobal: false,
+				showEmergencies: false,
 			},
 			{
 				type: 'aircraft',
 				name: 'Short Takeoff',
 				file: 'f45-short-takeoff.md',
-				related: ['f45-svtol.md', 'f45-vtol-landing.md'],
+				related: ['f45-vtol-landing.md'],
 				hidden: true,
 				showGlobal: false,
+				showEmergencies: true,
 			},
 			{
 				type: 'aircraft',
 				name: 'Vertical Landing',
 				file: 'f45-vtol-landing.md',
-				related: ['f45-svtol.md'],
 				hidden: true,
 				showGlobal: false,
+				showEmergencies: true,
 			},
 			{
 				type: 'aircraft',
@@ -78,13 +91,25 @@ export const checklists = [
 				related: ['f45-svtol.md'],
 				hidden: false,
 				showGlobal: false,
+				showEmergencies: true,
 			},
 		],
 	},
 ]
 
-export const globalChecklists = [
-	{ type: 'global', name: 'Wave Off', file: 'wave-off.md' },
+export const globalCarrierChecklists = [
+	{
+		type: 'global',
+		name: 'Flight Deck Overview',
+		file: 'flightdeck-overview.md',
+		hidden: true,
+	},
+	{
+		type: 'global',
+		name: 'Wave Off',
+		file: 'wave-off.md',
+		showEmergencies: true,
+	},
 	{
 		type: 'global',
 		name: 'LSO Guidance',
@@ -119,5 +144,14 @@ export const emergencyChecklists = [
 				file: 'f45-emerg-flightcontrol.md',
 			},
 		],
+	},
+]
+
+export const globalPages = [
+	{
+		type: 'page',
+		for: 'carrier',
+		name: 'Carrier Operations',
+		file: 'carrier-ops.md',
 	},
 ]

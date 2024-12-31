@@ -10,3 +10,11 @@
 8. Set engine TILT to 0 degrees at 120kts.
 
 <br>
+
+> **CAUTION:**
+
+<div style="border-left: 4px solid #d8222b; padding-left: 15px; margin-bottom: 20px;">
+    For all V/STOVL operations, a <u>TWR above 0.95</u> is necessary.
+</div>
+
+<br>

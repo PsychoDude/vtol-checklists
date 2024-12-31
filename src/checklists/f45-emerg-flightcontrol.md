@@ -1,4 +1,4 @@
-# F-45A EmergencyFlight Control Failure Procedure
+# F-45A Emergency Flight Control Failure Procedure
 
 1. Yaw:
     1. Utilize slight engine tilt to allow the 3D Reaction Control System (RCS) to activate.
