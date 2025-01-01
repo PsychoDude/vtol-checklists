@@ -37,7 +37,11 @@ export const checklists = [
 				type: 'aircraft',
 				name: 'Takeoff (CARRIER)',
 				file: 'f45-takeoff-CATOBAR.md',
-				related: ['carrier-departure.md', 'flightdeck-overview.md'],
+				related: [
+					'carrier-departure.md',
+					'flightdeck-overview.md',
+					'case-1.md',
+				],
 				hidden: false,
 				showGlobal: false,
 				showEmergencies: true,
@@ -96,7 +100,7 @@ export const checklists = [
 				type: 'aircraft',
 				name: 'VCAP',
 				file: 'f45-vcap.md',
-				related: ['f45-svtol.md'],
+				related: ['f45-vtol-landing.md'],
 				hidden: false,
 				showGlobal: false,
 				showEmergencies: true,
@@ -107,6 +111,20 @@ export const checklists = [
 		aircraft: 'carrier',
 		hidden: true,
 		checklists: [
+			{
+				type: 'global',
+				name: 'Flight Deck Overview',
+				file: 'flightdeck-overview.md',
+				showGlobal: true,
+				hidden: false,
+			},
+			{
+				type: 'global',
+				name: 'Departure',
+				file: 'carrier-departure.md',
+				showGlobal: false,
+				hidden: true,
+			},
 			{
 				type: 'page',
 				for: 'carrier',
@@ -133,13 +151,6 @@ export const checklists = [
 			},
 			{
 				type: 'global',
-				name: 'Flight Deck Overview',
-				file: 'flightdeck-overview.md',
-				showGlobal: true,
-				hidden: false,
-			},
-			{
-				type: 'global',
 				name: 'Carrier Lights (Meatball) Img',
 				file: 'meatball.md',
 				showGlobal: true,
@@ -156,14 +167,6 @@ export const checklists = [
 				],
 				for: 'carrier-ops.md',
 				showGlobal: true,
-				hidden: true,
-			},
-
-			{
-				type: 'global',
-				name: 'Departure',
-				file: 'carrier-departure.md',
-				showGlobal: false,
 				hidden: true,
 			},
 			{
