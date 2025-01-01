@@ -20,7 +20,7 @@ The VCAP button on the left is only enabled with a <u>TWR of 1.04</u> or higher.
 > **CAUTION:**
 
 <div style="border-left: 4px solid #d8222b; padding-left: 15px; margin-bottom: 20px;">
-    Throttle placement guidance: In order to hover the bar should be half filled and aligned with the middle notch (shown by the red arrow).  If the bar is filled higher/forward of the notch, the plane will move forward.  If the bar is lower than the notch, the plane will move backward.
+    Throttle placement guidance: In order to hover the bar should be half filled and aligned with the middle notch.  If the bar is filled higher/forward of the notch, the plane will move forward.  If the bar is lower than the notch, the plane will move backward.
 </div>
 
 <br>
