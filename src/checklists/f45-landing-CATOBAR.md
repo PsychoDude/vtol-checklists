@@ -15,7 +15,7 @@
 8. Maintain AoA of 8. Do NOT Flare.
 9. Upon Contact, Advance Throttle to Afterburner.
 10. (If Wire Caught) Hold Afterburner for 4 seconds. Set Throttle IDLE. Set Hook UP, Set Wings UP, Taxi to Parking Area.
-    - (If Wire Missed) Bolter! (SEE WAVE OFF PROCEDURES ON NEXT PAGE.)
+    - (If Wire Missed) Bolter! (SEE WAVE OFF PROCEDURES IN RELATED CHECKLISTS.)
 11. Monitor Fuel Levels.
 
 <br>

@@ -3,7 +3,7 @@
 > **NOTE:**
 
 <div style="border-left: 4px solid #a0e33b; padding-left: 15px; margin-bottom: 20px;">
-The VCAP button on the left is only enabled with a TWR of 1.04 or higher. VCAP is a mode that allows the pilot to easily match the speed of a moving ship for landing. The control system changes the inputs of the plane
+The VCAP button on the left is only enabled with a <u>TWR of 1.04</u> or higher. VCAP is a mode that allows the pilot to easily match the speed of a moving ship for landing. The control system changes the inputs of the plane
 </div>
 
 <br>

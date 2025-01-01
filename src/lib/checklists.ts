@@ -201,6 +201,11 @@ export const checklists = [
 		],
 	},
 	{
+		aircraft: 'EF-24G',
+		hidden: false,
+		checklists: [],
+	},
+	{
 		aircraft: 'carrier',
 		hidden: true,
 		checklists: [
@@ -215,6 +220,7 @@ export const checklists = [
 				type: 'global',
 				name: 'Departure',
 				file: 'carrier-departure.md',
+				related: ['case-1.md'],
 				showGlobal: false,
 				hidden: true,
 			},
@@ -230,6 +236,7 @@ export const checklists = [
 				type: 'global',
 				name: 'Wave Off',
 				file: 'wave-off.md',
+				related: ['case-1.md'],
 				showGlobal: true,
 				showEmergencies: true,
 				hidden: false,
@@ -259,7 +266,7 @@ export const checklists = [
 				type: 'global',
 				name: 'Marshal Stack Pattern',
 				file: 'marshal.md',
-				related: ['case-1-final.md', 'meatball.md'],
+				related: ['case-1-final.md'],
 				showGlobal: false,
 				hidden: true,
 			},
@@ -345,6 +352,38 @@ export const emergencyChecklists = [
 				related: [
 					'f26-landing-runway.md',
 					'f26-landing-CATOBAR-preface.md',
+				],
+			},
+		],
+	},
+	{
+		aircraft: 'EF-24G',
+		checklists: [
+			{
+				type: 'emergency',
+				name: 'Engine Failure',
+				file: 'ef24-emerg-enginefailure.md',
+				related: [
+					'ef24-landing-runway.md',
+					'ef24-landing-CATOBAR-preface.md',
+				],
+			},
+			{
+				type: 'emergency',
+				name: 'Missile Impact',
+				file: 'ef24-emerg-missileimpact.md',
+				related: [
+					'ef24-landing-runway.md',
+					'ef24-landing-CATOBAR-preface.md',
+				],
+			},
+			{
+				type: 'emergency',
+				name: 'Flight Control Failure',
+				file: 'ef24-emerg-flightcontrol.md',
+				related: [
+					'ef24-landing-runway.md',
+					'ef24-landing-CATOBAR-preface.md',
 				],
 			},
 		],
