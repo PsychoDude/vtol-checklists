@@ -150,13 +150,6 @@ export const checklists = [
 				hidden: false,
 			},
 			{
-				type: 'global',
-				name: 'Carrier Lights (Meatball) Img',
-				file: 'meatball.md',
-				showGlobal: true,
-				hidden: false,
-			},
-			{
 				type: 'page',
 				name: 'Case 1 Ops',
 				file: 'case-1.md',
@@ -183,6 +176,13 @@ export const checklists = [
 				file: 'case-1-final.md',
 				showGlobal: false,
 				hidden: true,
+			},
+			{
+				type: 'global',
+				name: 'Carrier Lights (Meatball) Img',
+				file: 'meatball.md',
+				showGlobal: true,
+				hidden: false,
 			},
 		],
 	},
