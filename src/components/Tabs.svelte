@@ -10,7 +10,8 @@
   let markdownContent: string | Promise<string> | null = null;
   let referrer: string | null = null;
   let globalPublicPages: ChecklistItem[] = checklists.find(checklist => checklist.aircraft === 'carrier')?.checklists || [];
-  
+  let emergencyRelatedChecklists: ChecklistItem[] = [];
+
   $: hasRelatedChecklists = !!(activeChecklist?.related?.length || (activeChecklist?.showEmergencies && emergencyChecklists.find(item => item.aircraft === activeAircraft)?.checklists?.length) || (activeAircraft && activeChecklist && activeChecklist.type === 'emergency'));
 
 const fetchMarkdown = async (file: string): Promise<string> => { 
@@ -63,6 +64,17 @@ const fetchMarkdown = async (file: string): Promise<string> => {
   };
 
   const handleEmergencyChecklistClick = async (checklist: EmergencyChecklist) => {
+    if (checklist.related){
+      for (let i = 0; i < checklist.related.length; i++) {
+        const relatedChecklist = await findChecklist(checklist.related[i]);
+        if (relatedChecklist && emergencyRelatedChecklists) {
+          emergencyRelatedChecklists.push(relatedChecklist);
+        }
+      }
+    }
+
+    console.log(emergencyRelatedChecklists)
+    
     switch (true) {
       case (referrer === 'aircraft' && !activeChecklist):
         referrer = 'aircraft'
@@ -91,6 +103,8 @@ const fetchMarkdown = async (file: string): Promise<string> => {
   };
 
   const handleBackClick = async () => {
+    emergencyRelatedChecklists = [];
+
     switch (true){
       case (referrer === 'aircraft' && !activeChecklist):
         activeAircraft = null
@@ -258,7 +272,7 @@ async function findChecklist(filename: string): Promise<Checklist | null> {
   {/if}
 
   <div class="flex flex-col space-y-2">
-    {#if activeChecklist.related}
+    {#if activeChecklist.related && activeChecklist.type !== 'emergency'}
       {#each activeChecklist.related as relatedFile (relatedFile)}
         {#each checklists as aircraftChecklists}
           {#each aircraftChecklists.checklists as relatedChecklist}
@@ -272,7 +286,7 @@ async function findChecklist(filename: string): Promise<Checklist | null> {
         {/each}
       {/each}
     {/if}
-    {#if activeChecklist.showEmergencies}
+    {#if activeChecklist.showEmergencies && activeChecklist.type !== 'emergency' }
       {#each (emergencyChecklists.find(item => item.aircraft === activeAircraft)?.checklists || []) as emergencychecklist (emergencychecklist)}
         {#if emergencychecklist !== activeChecklist}
           <button class="px-4 py-2 bg-red-500 hover:bg-red-700 text-white rounded" on:click={() => handleEmergencyChecklistClick(emergencychecklist)}>
@@ -281,6 +295,12 @@ async function findChecklist(filename: string): Promise<Checklist | null> {
         {/if}
       {/each}
     {:else if (activeAircraft && activeChecklist.type === 'emergency')}
+      {#if emergencyRelatedChecklists }{#each emergencyRelatedChecklists as relatedchecklist}
+      <button class="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded" on:click={() => handleChecklistClick(relatedchecklist)}>
+        {relatedchecklist.type === 'global' || (relatedchecklist.type === 'page' && relatedchecklist.for !== 'aircraft') ? relatedchecklist.file : `${relatedchecklist.name} (${activeAircraft})`}
+      </button>
+      {/each}
+      {/if}
       {#each (emergencyChecklists.find(item => item.aircraft === activeAircraft)?.checklists || []) as emergencychecklist (emergencychecklist)}
       {#if emergencychecklist !== activeChecklist}
       <button class="px-4 py-2 bg-red-500 hover:bg-red-700 text-white rounded" on:click={() => handleEmergencyChecklistClick(emergencychecklist)}>

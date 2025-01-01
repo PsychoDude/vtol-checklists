@@ -108,6 +108,11 @@ export const checklists = [
 		],
 	},
 	{
+		aircraft: 'F/A-26B',
+		hidden: false,
+		checklists: [],
+	},
+	{
 		aircraft: 'carrier',
 		hidden: true,
 		checklists: [
@@ -196,6 +201,41 @@ export const emergencyChecklists = [
 				type: 'emergency',
 				name: 'Engine Failure',
 				file: 'f45-emerg-enginefailure.md',
+				related: [
+					'f45-landing-runway.md',
+					'f45-landing-CATOBAR-preface.md',
+					'f45-vtol-landing.md',
+				],
+			},
+			{
+				type: 'emergency',
+				name: 'Missile Impact',
+				file: 'f45-emerg-missileimpact.md',
+				related: [
+					'f45-landing-runway.md',
+					'f45-landing-CATOBAR-preface.md',
+					'f45-vtol-landing.md',
+				],
+			},
+			{
+				type: 'emergency',
+				name: 'Flight Control Failure',
+				file: 'f45-emerg-flightcontrol.md',
+				related: [
+					'f45-landing-runway.md',
+					'f45-landing-CATOBAR-preface.md',
+					'f45-vtol-landing.md',
+				],
+			},
+		],
+	},
+	{
+		aircraft: 'F/A-26B',
+		checklists: [
+			{
+				type: 'emergency',
+				name: 'Engine Failure',
+				file: 'f26-emerg-enginefailure.md',
 			},
 			{
 				type: 'emergency',
