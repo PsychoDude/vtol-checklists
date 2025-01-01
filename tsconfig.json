@@ -12,11 +12,7 @@
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
 		"strict": true,
-		"skipLibCheck": true,
-		"paths": {
-			"$lib/*": ["./src/lib/*"],
-			"$components/*": ["./src/components/*"]
-		}
+		"skipLibCheck": true
 	},
 	"include": [
 		"src/**/*.d.ts",
