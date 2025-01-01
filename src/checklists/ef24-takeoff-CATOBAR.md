@@ -1,4 +1,4 @@
-# EF-24G CATOBAR Takeoff Procedure
+# EF-24G CATOBAR Takeoff Checklist
 
 1. Contact Tower For Taxi To Catapult
 2. Check Launch Bar DOWN

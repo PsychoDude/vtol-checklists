@@ -1,4 +1,6 @@
-# EF-24G Emergency Flight Control Failure Procedure
+# EF-24G Emergency Flight Controls Failure Checklist
+
+# **Alternate Control Methods:**
 
 1. Yaw:
     1. (If split throttle available) Cut power for the engine corresponding with the turn direction. Compensate roll.

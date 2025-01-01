@@ -1,4 +1,4 @@
-# EF-24G Runway Takeoff Procedure
+# EF-24G Runway Takeoff Checklist
 
 1. Set Flaps 2
 2. Set Wings AUTO

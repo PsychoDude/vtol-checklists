@@ -1,4 +1,4 @@
-# EF-24G Emergency Engine Failure Procedure
+# EF-24G Emergency Engine Failure Checklist
 
 1.  Start APU
 2.  Jettison ALL
@@ -23,12 +23,12 @@
     > **CAUTION:**
 
     <div style="border-left: 4px solid #d8222b; padding-left: 15px; margin-bottom: 20px;">
-        If critical damage has been inflicted to the engine(s), restart may not be successful. Keep the APU on and attempt to land the aircraft or see &lt; 5000ft procedures above (Step 4).
+        If critical damage has been inflicted to the engine(s), restart may not be successful. Keep the APU on and attempt to land the aircraft or see &lt; 5000ft procedures (Step 4).
     </div>
 
     <br>
 
-    5. Confirm engine(s) RPM NOMINAL (If engine(s) RPM NOT NOMINAL, Consult BELOW 5000ft AGL Checklist. (Step 4))
+    5. Confirm engine(s) RPM NOMINAL (If engine(s) RPM NOT NOMINAL, Consult BELOW 5000ft AGL procedures. (Step 4))
     6. Climb to 10000ft
     7. Contact nearest airbase for emergency landing
     8. Land (See Related Checklists)

@@ -1,4 +1,4 @@
-# EF-24G Startup Procedure
+# EF-24G Startup Checklist
 
 1. Start BATTERY
 2. Close CANOPY

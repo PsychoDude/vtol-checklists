@@ -297,6 +297,11 @@ export const checklists = [
 		],
 	},
 	{
+		aircraft: 'AH-94',
+		hidden: false,
+		checklists: [],
+	},
+	{
 		aircraft: 'carrier',
 		hidden: true,
 		checklists: [
@@ -405,7 +410,7 @@ export const emergencyChecklists = [
 			},
 			{
 				type: 'emergency',
-				name: 'Flight Control Failure',
+				name: 'Flight Controls Failure',
 				file: 'f45-emerg-flightcontrol.md',
 				related: [
 					'f45-landing-runway.md',
@@ -438,7 +443,7 @@ export const emergencyChecklists = [
 			},
 			{
 				type: 'emergency',
-				name: 'Flight Control Failure',
+				name: 'Flight Controls Failure',
 				file: 'f26-emerg-flightcontrol.md',
 				related: [
 					'f26-landing-runway.md',
@@ -470,12 +475,22 @@ export const emergencyChecklists = [
 			},
 			{
 				type: 'emergency',
-				name: 'Flight Control Failure',
+				name: 'Flight Controls Failure',
 				file: 'ef24-emerg-flightcontrol.md',
 				related: [
 					'ef24-landing-runway.md',
 					'ef24-landing-CATOBAR-preface.md',
 				],
+			},
+		],
+	},
+	{
+		aircraft: 'AH-94',
+		checklists: [
+			{
+				type: 'page',
+				name: 'Emergency Checklists',
+				file: 'ah94-emerg.md',
 			},
 		],
 	},

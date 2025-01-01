@@ -1,4 +1,4 @@
-# F/A-26B Startup Procedure
+# F/A-26B Startup Checklist
 
 1. Start BATTERY
 2. Set Lights AS REQUIRED

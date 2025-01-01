@@ -1,4 +1,4 @@
-# F-45A CATOBAR Takeoff Procedure
+# F-45A CATOBAR Takeoff Checklist
 
 1. Taxi to and hold short of catapult.
 2. Set launch bar EXTEND.

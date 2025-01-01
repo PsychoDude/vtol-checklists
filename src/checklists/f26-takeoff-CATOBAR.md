@@ -1,4 +1,4 @@
-# F/A-26B CATOBAR Takeoff Procedure
+# F/A-26B CATOBAR Takeoff Checklist
 
 1. Contact Tower For Taxi To Catapult
 2. Check Launch Bar DOWN

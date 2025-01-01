@@ -1,4 +1,4 @@
-# F-45A VCAP Procedure
+# F-45A VCAP Checklist
 
 > **NOTE:**
 
