@@ -72,8 +72,6 @@ const fetchMarkdown = async (file: string): Promise<string> => {
         }
       }
     }
-
-    console.log(emergencyRelatedChecklists)
     
     switch (true) {
       case (referrer === 'aircraft' && !activeChecklist):
