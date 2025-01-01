@@ -66,16 +66,8 @@ const fetchMarkdown = async (file: string): Promise<string> => {
   };
 
   const handleEmergencyChecklistClick = async (checklist: EmergencyChecklist) => {
-    emergenciesShowChecklists = []
 
-    if (checklist.related){
-      for (let i = 0; i < checklist.related.length; i++) {
-        const relatedChecklist = await findChecklist(checklist.related[i]);
-        if (relatedChecklist && emergencyRelatedChecklists) {
-          emergencyRelatedChecklists.push(relatedChecklist);
-        }
-      }
-    }
+    const related = await filterEmergRelatedChecklists(checklist)
     
     switch (true) {
       case (referrer === 'aircraft' && !activeChecklist):
@@ -95,7 +87,6 @@ const fetchMarkdown = async (file: string): Promise<string> => {
         referrer = activeChecklist?.file || null;
         activeChecklist = checklist;
         break;
-        break
       default:
         break;
     }
@@ -110,7 +101,7 @@ const fetchMarkdown = async (file: string): Promise<string> => {
   };
 
   const handleBackClick = async () => {
-
+    emergencyRelatedChecklists = []
     switch (true){
       case (referrer === 'aircraft' && !activeChecklist):
         activeAircraft = null
@@ -137,10 +128,15 @@ const fetchMarkdown = async (file: string): Promise<string> => {
         }
         break
       case (activeAircraft && activeChecklist && activeChecklist.type === 'emergency'):
-        if (referrer && referrer === 'aircraft') {
+        if (referrer && referrer === 'aircraft' && activeChecklist.type !== 'emergency') {
           referrer = null
           activeChecklist = null
           markdownContent = null
+        } else if (referrer && referrer === 'aircraft' && activeChecklist.type === 'emergency') {
+          referrer = null
+          activeChecklist = null
+          markdownContent = null
+          filterHiddenEmergChecklists()
         } else if (referrer) {
           activeChecklist = await findChecklist(referrer)
           markdownContent = await fetchMarkdown(referrer);
@@ -207,6 +203,17 @@ async function findChecklist(filename: string): Promise<Checklist | null> {
       }
     } 
   };
+
+  const filterEmergRelatedChecklists = async (checklist: Checklist) => {
+    if (checklist.related){
+      for (let i = 0; i < checklist.related.length; i++) {
+        const relatedChecklist = await findChecklist(checklist.related[i]);
+        if (relatedChecklist && emergencyRelatedChecklists) {
+          emergencyRelatedChecklists.push(relatedChecklist);
+        }
+      }
+    }
+  }
 
   onMount(() => {
     // Initially, do not load the first aircraft and checklist
@@ -312,7 +319,6 @@ async function findChecklist(filename: string): Promise<Checklist | null> {
         {/if}
       {/each}
     {:else if (activeAircraft && activeChecklist.type === 'emergency')}
-    {console.log(emergencyRelatedChecklists)}
       {#if emergencyRelatedChecklists }{#each emergencyRelatedChecklists as relatedchecklist}
       <button class="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded" on:click={() => handleChecklistClick(relatedchecklist)}>
         {relatedchecklist.type === 'global' || (relatedchecklist.type === 'page' && relatedchecklist.for !== 'aircraft') ? relatedchecklist.file : `${relatedchecklist.name} (${activeAircraft})`}
