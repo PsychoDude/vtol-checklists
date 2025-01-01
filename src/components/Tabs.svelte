@@ -43,8 +43,10 @@ const fetchMarkdown = async (file: string): Promise<string> => {
       case (referrer === null && activeAircraft !== null):
         referrer = 'aircraft'
         break;
-      case (referrer === 'aircraft' && activeChecklist !== null):
+      case (referrer === 'aircraft' && activeChecklist !== null):      
         referrer = activeChecklist?.file || null;
+        activeChecklist = checklist;
+        markdownContent = await fetchMarkdown(checklist.file);
         break;
       case (activeChecklist && activeChecklist.type === 'page'):
         referrer = activeChecklist.file || null;
@@ -62,10 +64,17 @@ const fetchMarkdown = async (file: string): Promise<string> => {
 
   const handleEmergencyChecklistClick = async (checklist: EmergencyChecklist) => {
     switch (true) {
+      case (referrer === 'aircraft' && !activeChecklist):
+        referrer = 'aircraft'
+        break;
+      case ( referrer === 'aircraft' && activeChecklist !== null && (activeChecklist.type === 'page' || activeChecklist.type === 'emergency')):
+        referrer = activeChecklist?.file || null;
+        activeChecklist = checklist;
+        break;
       case (referrer === null && activeAircraft !== null):
         referrer = 'aircraft'
         break;
-      case (referrer === 'aircraft' && activeChecklist !== null):
+      case (referrer === 'aircraft' && activeChecklist !== null && (activeChecklist.type === 'page' || activeChecklist.type === 'aircraft') && referrer === 'aircraft'):
         referrer = activeChecklist?.file || null;
         break;
       default:
@@ -117,6 +126,10 @@ const fetchMarkdown = async (file: string): Promise<string> => {
           markdownContent = await fetchMarkdown(referrer);
           referrer = 'aircraft'
         }
+        break;
+      case ( activeAircraft !== null && activeChecklist !== null && activeChecklist.type === 'page' && referrer === 'aircraft'):
+        activeChecklist = null;
+        markdownContent = null;
         break;
       case (activeAircraft !== null && activeChecklist !== null && referrer !== activeChecklist.file):
         if (referrer === 'aircraft' && activeChecklist.type === 'aircraft') {
@@ -252,7 +265,7 @@ async function findChecklist(filename: string): Promise<Checklist | null> {
             {@const match = relatedChecklist.file === relatedFile}
             {#if match}
               <button class="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded" on:click={() => handleChecklistClick(relatedChecklist)}>
-                {relatedChecklist.type === 'global' ? relatedChecklist.name : `${relatedChecklist.name} (${activeAircraft})`}
+                {relatedChecklist.type === 'global' || (relatedChecklist.type === 'page' && relatedChecklist.for !== 'aircraft') ? relatedChecklist.name : `${relatedChecklist.name} (${activeAircraft})`}
               </button>
             {/if}
           {/each}
