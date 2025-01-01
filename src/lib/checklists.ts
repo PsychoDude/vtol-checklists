@@ -298,7 +298,26 @@ export const checklists = [
 	{
 		aircraft: 'AH-94',
 		hidden: false,
-		checklists: [],
+		checklists: [
+			{
+				type: 'aircraft',
+				name: 'Startup (PIC)',
+				file: 'ah94-startup-pic.md',
+				related: ['ah94-startup-cpg.md'],
+				hidden: false,
+				showGlobal: true,
+				showEmergencies: false,
+			},
+			{
+				type: 'aircraft',
+				name: 'Startup (CPG)',
+				file: 'ah94-startup-cpg.md',
+				related: ['ah94-startup-pic.md'],
+				hidden: false,
+				showGlobal: true,
+				showEmergencies: false,
+			},
+		],
 	},
 	{
 		aircraft: 'carrier',
