@@ -13,6 +13,7 @@ export interface EmergencyChecklist {
 	type: string
 	name: string
 	file: string
+	related?: string[]
 }
 
 export interface EmergencyChecklists {
