@@ -1,6 +1,6 @@
 <script lang="ts">
   import Tabs from '$components/Tabs.svelte';
-  import { checklists, globalCarrierChecklists } from '$lib/checklists';
+  import { checklists } from '$lib/checklists';
 </script>
 
-<Tabs {checklists} {globalCarrierChecklists} />
+<Tabs {checklists} />

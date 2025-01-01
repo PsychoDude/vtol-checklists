@@ -1,6 +1,7 @@
 export const checklists = [
 	{
 		aircraft: 'F-45A',
+		hidden: false,
 		checklists: [
 			{
 				type: 'aircraft',
@@ -36,35 +37,39 @@ export const checklists = [
 				type: 'aircraft',
 				name: 'Takeoff (CARRIER)',
 				file: 'f45-takeoff-CATOBAR.md',
+				related: ['carrier-departure.md', 'flightdeck-overview.md'],
 				hidden: false,
 				showGlobal: false,
 				showEmergencies: true,
 			},
 			{
-				type: 'aircraft',
+				type: 'page',
 				name: 'Landing (CARRIER)',
 				file: 'f45-landing-CATOBAR-preface.md',
-				related: ['f45-landing-CATOBAR.md'],
+				related: [
+					'marshal.md',
+					'case-1-final.md',
+					'f45-landing-CATOBAR.md',
+				],
 				hidden: false,
 				showGlobal: true,
 				showEmergencies: false,
 			},
 			{
 				type: 'aircraft',
-				name: 'Landing Carrier - CASE I',
+				name: 'Carrier Landing - CASE I',
 				file: 'f45-landing-CATOBAR.md',
-				related: ['f45-landing-CATOBAR-preface.md'],
 				hidden: true,
 				showGlobal: true,
 				showEmergencies: true,
 			},
 			{
-				type: 'aircraft',
+				type: 'page',
 				name: 'V/STOL',
 				file: 'f45-svtol.md',
 				related: ['f45-short-takeoff.md', 'f45-vtol-landing.md'],
 				hidden: false,
-				showGlobal: false,
+				showGlobal: true,
 				showEmergencies: false,
 			},
 			{
@@ -95,33 +100,86 @@ export const checklists = [
 			},
 		],
 	},
-]
-
-export const globalCarrierChecklists = [
 	{
-		type: 'global',
-		name: 'Flight Deck Overview',
-		file: 'flightdeck-overview.md',
+		aircraft: 'carrier',
 		hidden: true,
+		checklists: [
+			{
+				type: 'page',
+				for: 'carrier',
+				name: 'Carrier Operations',
+				file: 'carrier-ops.md',
+				showGlobal: true,
+				hidden: false,
+			},
+			{
+				type: 'global',
+				name: 'Wave Off',
+				file: 'wave-off.md',
+				showGlobal: true,
+				showEmergencies: true,
+				hidden: false,
+			},
+			{
+				type: 'global',
+				name: 'LSO Guidance',
+				file: 'lso-guidance.md',
+				related: ['wave-off.md'],
+				showGlobal: true,
+				hidden: false,
+			},
+			{
+				type: 'global',
+				name: 'Flight Deck Overview',
+				file: 'flightdeck-overview.md',
+				showGlobal: true,
+				hidden: false,
+			},
+			{
+				type: 'global',
+				name: 'Carrier Lights (Meatball) Img',
+				file: 'meatball.md',
+				showGlobal: true,
+				hidden: false,
+			},
+			{
+				type: 'page',
+				name: 'Case 1 Ops',
+				file: 'case-1.md',
+				related: [
+					'carrier-departure.md',
+					'marshal.md',
+					'case-1-final.md',
+				],
+				for: 'carrier-ops.md',
+				showGlobal: true,
+				hidden: true,
+			},
+
+			{
+				type: 'global',
+				name: 'Departure',
+				file: 'carrier-departure.md',
+				showGlobal: false,
+				hidden: true,
+			},
+			{
+				type: 'global',
+				name: 'Marshal Stack Pattern',
+				file: 'marshal.md',
+				related: ['case-1-final.md', 'meatball.md'],
+				showGlobal: false,
+				hidden: true,
+			},
+			{
+				type: 'global',
+				name: 'Final Approach',
+				file: 'case-1-final.md',
+				showGlobal: false,
+				hidden: true,
+			},
+		],
 	},
-	{
-		type: 'global',
-		name: 'Wave Off',
-		file: 'wave-off.md',
-		showEmergencies: true,
-	},
-	{
-		type: 'global',
-		name: 'LSO Guidance',
-		file: 'lso-guidance.md',
-		related: ['wave-off.md'],
-	},
-	{
-		type: 'global',
-		name: 'Carrier Lights (Meatball) Img',
-		file: 'meatball.md',
-	},
-	{ type: 'global', name: 'Case 1 Diagram', file: 'case-1.md' },
 ]
 
 export const emergencyChecklists = [
@@ -144,14 +202,5 @@ export const emergencyChecklists = [
 				file: 'f45-emerg-flightcontrol.md',
 			},
 		],
-	},
-]
-
-export const globalPages = [
-	{
-		type: 'page',
-		for: 'carrier',
-		name: 'Carrier Operations',
-		file: 'carrier-ops.md',
 	},
 ]
