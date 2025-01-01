@@ -119,7 +119,6 @@ export const checklists = [
 					'f45-landing-runway.md',
 					'f45-landing-CATOBAR-preface.md',
 					'f45-vtol-landing.md',
-					'f45-vcap.md',
 				],
 				hidden: false,
 				showGlobal: false,
