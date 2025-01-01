@@ -1,6 +1,6 @@
 <script lang="ts">
   import { marked } from 'marked';
-  import type { Checklist, EmergencyChecklist, AircraftChecklists, ChecklistItem } from '$lib/types';
+  import type { Checklist, EmergencyChecklist, AircraftChecklists, ChecklistItem, EmergencyChecklists } from '$lib/types';
   import { onMount } from 'svelte';
   import { emergencyChecklists } from '$lib/checklists'
 
@@ -11,6 +11,7 @@
   let referrer: string | null = null;
   let globalPublicPages: ChecklistItem[] = checklists.find(checklist => checklist.aircraft === 'carrier')?.checklists || [];
   let emergencyRelatedChecklists: ChecklistItem[] = [];
+  let emergenciesShowChecklists: EmergencyChecklist[] = [];
 
   $: hasRelatedChecklists = !!(activeChecklist?.related?.length || (activeChecklist?.showEmergencies && emergencyChecklists.find(item => item.aircraft === activeAircraft)?.checklists?.length) || (activeAircraft && activeChecklist && activeChecklist.type === 'emergency'));
 
@@ -37,6 +38,7 @@ const fetchMarkdown = async (file: string): Promise<string> => {
     activeChecklist = null;
     markdownContent = null;
     referrer = 'aircraft';
+    filterHiddenEmergChecklists();
   };
 
   const handleChecklistClick = async (checklist: Checklist) => {
@@ -64,6 +66,8 @@ const fetchMarkdown = async (file: string): Promise<string> => {
   };
 
   const handleEmergencyChecklistClick = async (checklist: EmergencyChecklist) => {
+    emergenciesShowChecklists = []
+
     if (checklist.related){
       for (let i = 0; i < checklist.related.length; i++) {
         const relatedChecklist = await findChecklist(checklist.related[i]);
@@ -87,6 +91,11 @@ const fetchMarkdown = async (file: string): Promise<string> => {
       case (referrer === 'aircraft' && activeChecklist !== null && (activeChecklist.type === 'page' || activeChecklist.type === 'aircraft') && referrer === 'aircraft'):
         referrer = activeChecklist?.file || null;
         break;
+      case (referrer && activeChecklist && activeChecklist.type === 'emergency-page'):
+        referrer = activeChecklist?.file || null;
+        activeChecklist = checklist;
+        break;
+        break
       default:
         break;
     }
@@ -101,7 +110,6 @@ const fetchMarkdown = async (file: string): Promise<string> => {
   };
 
   const handleBackClick = async () => {
-    emergencyRelatedChecklists = [];
 
     switch (true){
       case (referrer === 'aircraft' && !activeChecklist):
@@ -189,6 +197,17 @@ async function findChecklist(filename: string): Promise<Checklist | null> {
   return null;
 }
 
+  const filterHiddenEmergChecklists = () => {
+    emergenciesShowChecklists = [];
+    const properchecklists = emergencyChecklists.find((checklist) => checklist.aircraft === activeAircraft)?.checklists;
+    if (properchecklists) {
+      const lists = properchecklists.filter((checklist) => !checklist.hidden);
+      if (lists) for (let i = 0;i < lists.length; i++) {
+        emergenciesShowChecklists.push(lists[i])
+      }
+    } 
+  };
+
   onMount(() => {
     // Initially, do not load the first aircraft and checklist
   });
@@ -232,10 +251,10 @@ async function findChecklist(filename: string): Promise<Checklist | null> {
         {/each}
 
         
-        {#each (emergencyChecklists.find(item => item.aircraft === activeAircraft)?.checklists || []) as emergencychecklist}
+        {#each emergenciesShowChecklists as emergencychecklist}
         <button class="px-4 py-2 bg-red-500 hover:bg-red-700 text-white rounded" on:click={() => handleEmergencyChecklistClick(emergencychecklist)}>
-            {emergencychecklist.name}
-          </button>
+          {emergencychecklist.name}
+        </button>
         {/each}
       </div>
     </div>
@@ -248,7 +267,7 @@ async function findChecklist(filename: string): Promise<Checklist | null> {
       <h2 class="text-2xl font-bold mb-2">{activeChecklist.name}</h2>
       <div class="space-y-4">{@html markdownContent}</div>
       {#if activeChecklist?.type === 'page' && activeChecklist?.for === 'carrier'}
-      <!-- Display Carrier Knowledge/Procedures -->
+      <!-- Display Carrier Knowledge/Checklists -->
       <div class="flex flex-col space-y-2">
         {#each checklists as checklist}
         {#if checklist.aircraft === 'carrier' }
@@ -262,11 +281,11 @@ async function findChecklist(filename: string): Promise<Checklist | null> {
         {/if}
         {/each}
       </div>
-      {:else if (activeChecklist.related || activeChecklist.showGlobal === true || activeChecklist.type === 'emergency' || activeChecklist.showEmergencies) }
+      {:else if (activeChecklist.related || activeChecklist.showGlobal === true || activeChecklist.type === 'emergency' || activeChecklist.showEmergencies || activeChecklist.type === 'emergency-page') }
         <!-- Display related checklists -->
 <div class="mt-4">
   {#if hasRelatedChecklists}
-    <h3 class="uppercase font-bold mb-3">Related Checklists:</h3>
+    <h2 class="uppercase font-bold mb-2">Related Checklists:</h2>
   {/if}
 
   <div class="flex flex-col space-y-2">
@@ -293,6 +312,7 @@ async function findChecklist(filename: string): Promise<Checklist | null> {
         {/if}
       {/each}
     {:else if (activeAircraft && activeChecklist.type === 'emergency')}
+    {console.log(emergencyRelatedChecklists)}
       {#if emergencyRelatedChecklists }{#each emergencyRelatedChecklists as relatedchecklist}
       <button class="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded" on:click={() => handleChecklistClick(relatedchecklist)}>
         {relatedchecklist.type === 'global' || (relatedchecklist.type === 'page' && relatedchecklist.for !== 'aircraft') ? relatedchecklist.file : `${relatedchecklist.name} (${activeAircraft})`}
@@ -300,6 +320,14 @@ async function findChecklist(filename: string): Promise<Checklist | null> {
       {/each}
       {/if}
       {#each (emergencyChecklists.find(item => item.aircraft === activeAircraft)?.checklists || []) as emergencychecklist (emergencychecklist)}
+      {#if emergencychecklist !== activeChecklist && emergencychecklist.type !== 'emergency-page'}
+      <button class="px-4 py-2 bg-red-500 hover:bg-red-700 text-white rounded" on:click={() => handleEmergencyChecklistClick(emergencychecklist)}>
+        {`${emergencychecklist.name} (${activeAircraft})`}
+      </button>
+      {/if}
+      {/each}
+    {:else if (activeAircraft && activeChecklist && activeChecklist.type === 'emergency-page')}
+    {#each (emergencyChecklists.find(item => item.aircraft === activeAircraft)?.checklists || []) as emergencychecklist (emergencychecklist)}
       {#if emergencychecklist !== activeChecklist}
       <button class="px-4 py-2 bg-red-500 hover:bg-red-700 text-white rounded" on:click={() => handleEmergencyChecklistClick(emergencychecklist)}>
         {`${emergencychecklist.name} (${activeAircraft})`}

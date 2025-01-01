@@ -3,16 +3,17 @@ export interface Checklist {
 	name: string
 	file: string
 	for?: string
+	hidden?: boolean
 	related?: string[]
 	showGlobal?: boolean
 	showEmergencies?: boolean
-	hidden?: boolean
 }
 
 export interface EmergencyChecklist {
 	type: string
 	name: string
 	file: string
+	hidden: boolean
 	related?: string[]
 }
 
@@ -26,8 +27,8 @@ export interface ChecklistItem {
 	name: string
 	file: string
 	for?: string
-	related?: string[]
 	hidden?: boolean
+	related?: string[]
 	showGlobal?: boolean
 	showEmergencies?: boolean
 }

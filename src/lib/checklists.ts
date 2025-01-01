@@ -392,6 +392,7 @@ export const emergencyChecklists = [
 				type: 'emergency',
 				name: 'Engine Failure',
 				file: 'f45-emerg-enginefailure.md',
+				hidden: false,
 				related: [
 					'f45-landing-runway.md',
 					'f45-landing-CATOBAR-preface.md',
@@ -402,6 +403,7 @@ export const emergencyChecklists = [
 				type: 'emergency',
 				name: 'Missile Impact',
 				file: 'f45-emerg-missileimpact.md',
+				hidden: false,
 				related: [
 					'f45-landing-runway.md',
 					'f45-landing-CATOBAR-preface.md',
@@ -412,6 +414,7 @@ export const emergencyChecklists = [
 				type: 'emergency',
 				name: 'Flight Controls Failure',
 				file: 'f45-emerg-flightcontrol.md',
+				hidden: false,
 				related: [
 					'f45-landing-runway.md',
 					'f45-landing-CATOBAR-preface.md',
@@ -431,6 +434,7 @@ export const emergencyChecklists = [
 					'f26-landing-runway.md',
 					'f26-landing-CATOBAR-preface.md',
 				],
+				hidden: false,
 			},
 			{
 				type: 'emergency',
@@ -440,6 +444,7 @@ export const emergencyChecklists = [
 					'f26-landing-runway.md',
 					'f26-landing-CATOBAR-preface.md',
 				],
+				hidden: false,
 			},
 			{
 				type: 'emergency',
@@ -449,6 +454,7 @@ export const emergencyChecklists = [
 					'f26-landing-runway.md',
 					'f26-landing-CATOBAR-preface.md',
 				],
+				hidden: false,
 			},
 		],
 	},
@@ -463,6 +469,7 @@ export const emergencyChecklists = [
 					'ef24-landing-runway.md',
 					'ef24-landing-CATOBAR-preface.md',
 				],
+				hidden: false,
 			},
 			{
 				type: 'emergency',
@@ -472,6 +479,7 @@ export const emergencyChecklists = [
 					'ef24-landing-runway.md',
 					'ef24-landing-CATOBAR-preface.md',
 				],
+				hidden: false,
 			},
 			{
 				type: 'emergency',
@@ -481,6 +489,7 @@ export const emergencyChecklists = [
 					'ef24-landing-runway.md',
 					'ef24-landing-CATOBAR-preface.md',
 				],
+				hidden: false,
 			},
 		],
 	},
@@ -488,9 +497,50 @@ export const emergencyChecklists = [
 		aircraft: 'AH-94',
 		checklists: [
 			{
-				type: 'page',
+				type: 'emergency-page',
 				name: 'Emergency Checklists',
 				file: 'ah94-emerg.md',
+				hidden: false,
+			},
+			{
+				type: 'emergency',
+				name: 'Single Engine Failure',
+				file: 'ah94-emerg-singleengine.md',
+				related: [
+					'ah94-landing-runway.md',
+					'ah94-landing-CATOBAR-preface.md',
+				],
+				hidden: true,
+			},
+			{
+				type: 'emergency',
+				name: 'Dual Engine Failure',
+				file: 'ah94-emerg-dualengine.md',
+				related: [
+					'ah94-landing-runway.md',
+					'ah94-landing-CATOBAR-preface.md',
+				],
+				hidden: true,
+			},
+			{
+				type: 'emergency',
+				name: 'Anti-Torque Failure',
+				file: 'ah94-emerg-antitorque.md',
+				related: [
+					'ah94-landing-runway.md',
+					'ah94-landing-CATOBAR-preface.md',
+				],
+				hidden: true,
+			},
+			{
+				type: 'emergency',
+				name: 'Auto-Rotation',
+				file: 'ah94-emerg-autorotation.md',
+				related: [
+					'ah94-landing-runway.md',
+					'ah94-landing-CATOBAR-preface.md',
+				],
+				hidden: true,
 			},
 		],
 	},
