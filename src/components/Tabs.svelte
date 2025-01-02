@@ -12,6 +12,7 @@
   let globalPublicPages: ChecklistItem[] = checklists.find(checklist => checklist.aircraft === 'carrier')?.checklists || [];
   let emergencyRelatedChecklists: ChecklistItem[] = [];
   let emergenciesShowChecklists: EmergencyChecklist[] = [];
+  let secondTime = { value: 0, page: null };
 
   $: hasRelatedChecklists = !!(activeChecklist?.related?.length || (activeChecklist?.showEmergencies && emergencyChecklists.find(item => item.aircraft === activeAircraft)?.checklists?.length) || (activeAircraft && activeChecklist && activeChecklist.type === 'emergency'));
 
@@ -42,6 +43,46 @@ const fetchMarkdown = async (file: string): Promise<string> => {
   };
 
   const handleChecklistClick = async (checklist: Checklist) => {
+    emergencyRelatedChecklists = []
+    emergenciesShowChecklists = []
+
+    console.log(referrer, checklist, activeAircraft, activeChecklist, checklist.type)
+
+    // switch (true) {
+    //   case (referrer === 'aircraft' && checklist.type === 'aircraft' && !activeChecklist):
+    //     activeChecklist = checklist
+    //     markdownContent = await fetchMarkdown(checklist.file)
+    //     break
+    //  case (referrer === 'aircraft' && checklist.type === 'aircraft' && activeChecklist !== null):
+    //     if (secondTime.page !== null && secondTime.value === 2)
+    //       referrer = secondTime.page
+    //       secondTime.page = null
+    //       secondTime.value = 0
+    //     } else if (secondTime.page !== null) {
+    //       referrer = activeChecklist?.file || null
+    //       secondTime.value += 1
+    //     } else {}
+    //     activeChecklist = checklist
+    //     markdownContent = await fetchMarkdown(checklist.file)
+    //     break
+    //  case (referrer === 'aircraft' && checklist.type === 'page' && !activeChecklist):
+    //     secondTime.page = checklist.file
+    //     secondTime.value = 0
+    //     activeChecklist = checklist
+    //     markdownContent = await fetchMarkdown(checklist.file)
+    //     break
+    //  case (referrer === null && checklist.type === 'global' && activeChecklist !== null):
+    //     secondTime.page = checklist.file
+    //     secondTime.value = 0
+    //     activeChecklist = checklist
+    //     markdownContent = await fetchMarkdown(checklist.file)
+    //     break
+    //  default:
+    //     activeChecklist = checklist
+    //     markdownContent = await fetchMarkdown(checklist.file)
+    //     break
+    // }
+
     switch (true) {
       case (referrer === null && activeAircraft !== null):
         referrer = 'aircraft'
@@ -57,6 +98,7 @@ const fetchMarkdown = async (file: string): Promise<string> => {
         markdownContent = await fetchMarkdown(checklist.file);
         break
       default:
+        console.log('default')
         activeChecklist = checklist;
         markdownContent = await fetchMarkdown(checklist.file);
         break;
@@ -68,28 +110,51 @@ const fetchMarkdown = async (file: string): Promise<string> => {
   const handleEmergencyChecklistClick = async (checklist: EmergencyChecklist) => {
 
     const related = await filterEmergRelatedChecklists(checklist)
-    
-    switch (true) {
+
+    console.log(referrer, activeChecklist?.type, activeChecklist)
+
+    switch(true) {
+      case (referrer === 'aircraft' && activeChecklist !== null):
+        referrer = activeChecklist?.file
+        activeChecklist = checklist
+        markdownContent = await fetchMarkdown(checklist.file)
+        break
       case (referrer === 'aircraft' && !activeChecklist):
-        referrer = 'aircraft'
-        break;
-      case ( referrer === 'aircraft' && activeChecklist !== null && (activeChecklist.type === 'page' || activeChecklist.type === 'emergency')):
-        referrer = activeChecklist?.file || null;
-        activeChecklist = checklist;
-        break;
-      case (referrer === null && activeAircraft !== null):
-        referrer = 'aircraft'
-        break;
-      case (referrer === 'aircraft' && activeChecklist !== null && (activeChecklist.type === 'page' || activeChecklist.type === 'aircraft') && referrer === 'aircraft'):
-        referrer = activeChecklist?.file || null;
-        break;
-      case (referrer && activeChecklist && activeChecklist.type === 'emergency-page'):
-        referrer = activeChecklist?.file || null;
-        activeChecklist = checklist;
-        break;
+        activeChecklist = checklist
+        markdownContent = await fetchMarkdown(checklist.file)
+        break
       default:
-        break;
+        console.log('default')
+        break
     }
+    
+    // switch (true) {
+    //   case (referrer === 'aircraft' && !activeChecklist):
+    //     referrer = 'aircraft'
+    //     break;
+    //   case ( referrer === 'aircraft' && activeChecklist !== null && (activeChecklist.type === 'page' || activeChecklist.type === 'emergency')):
+    //     referrer = activeChecklist?.file || null;
+    //     activeChecklist = checklist;
+    //     break;
+    //   case (referrer === null && activeAircraft !== null):
+    //     referrer = 'aircraft'
+    //     break;
+    //   case (referrer === 'aircraft' && activeChecklist !== null && (activeChecklist.type === 'page' || activeChecklist.type === 'aircraft') && referrer === 'aircraft'):
+    //     referrer = activeChecklist?.file || null;
+    //     break;
+    //   case (referrer && activeChecklist && activeChecklist.type === 'emergency-page'):
+    //     referrer = activeChecklist?.file || null;
+    //     activeChecklist = checklist;
+    //     break;
+    //   default:
+    //     if (referrer){
+    //       const refer = await findChecklist(referrer)
+    //       if (refer)  await filterEmergRelatedChecklists(refer);
+    //       activeChecklist = refer;
+    //       markdownContent = await fetchMarkdown(referrer);
+    //     }
+    //     break;
+    // }
 
     activeChecklist = checklist;
     markdownContent = await fetchMarkdown(checklist.file);
@@ -102,6 +167,8 @@ const fetchMarkdown = async (file: string): Promise<string> => {
 
   const handleBackClick = async () => {
     emergencyRelatedChecklists = []
+
+    console.log(referrer)
     switch (true){
       case (referrer === 'aircraft' && !activeChecklist):
         activeAircraft = null
@@ -127,8 +194,8 @@ const fetchMarkdown = async (file: string): Promise<string> => {
           }
         }
         break
-      case (activeAircraft && activeChecklist && activeChecklist.type === 'emergency'):
-        if (referrer && referrer === 'aircraft' && activeChecklist.type !== 'emergency') {
+      case (activeAircraft && activeChecklist && (activeChecklist.type === 'emergency' || activeChecklist.type === 'emergency-page')):
+        if (referrer && referrer === 'aircraft' && activeChecklist.type === 'emergency-page') {
           referrer = null
           activeChecklist = null
           markdownContent = null
@@ -137,10 +204,6 @@ const fetchMarkdown = async (file: string): Promise<string> => {
           activeChecklist = null
           markdownContent = null
           filterHiddenEmergChecklists()
-        } else if (referrer) {
-          activeChecklist = await findChecklist(referrer)
-          markdownContent = await fetchMarkdown(referrer);
-          referrer = 'aircraft'
         }
         break;
       case ( activeAircraft !== null && activeChecklist !== null && activeChecklist.type === 'page' && referrer === 'aircraft'):
@@ -152,7 +215,7 @@ const fetchMarkdown = async (file: string): Promise<string> => {
           referrer = null;
           activeChecklist = null;
           markdownContent = null;
-        } else if (referrer && referrer !== 'page') {
+        } else if (referrer && referrer !== 'page' && referrer !== 'aircraft') {
           activeChecklist = await findChecklist(referrer)
           markdownContent = await fetchMarkdown(referrer);
           referrer = activeAircraft? 'aircraft' : null; 
@@ -160,8 +223,11 @@ const fetchMarkdown = async (file: string): Promise<string> => {
           referrer = null;
           activeChecklist = null;
           markdownContent = null; 
-        }
-    
+        } else {
+          referrer = null;
+          activeChecklist = null;
+          markdownContent = null; 
+        }  
         break;
       case (activeAircraft !== null && activeChecklist !== null && referrer === activeChecklist.file):
         activeChecklist = null
