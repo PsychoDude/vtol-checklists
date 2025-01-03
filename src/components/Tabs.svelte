@@ -45,12 +45,9 @@ const fetchMarkdown = async (file: string): Promise<string> => {
   const handleChecklistClick = async (checklist: Checklist) => {
     emergencyRelatedChecklists = []
     emergenciesShowChecklists = []
-
-    console.log(`in \nreferrer:`,referrer,`\n secondTime:`,secondTime,`\n checklist:`,checklist,`\n activeCheck`,activeChecklist)
     
     switch (true) {
       case (referrer && referrer.type !== 'page' && referrer.type !== 'emergency-page' && checklist.type !== 'page' && activeChecklist !== null):
-        console.log('first case')
         if (secondTime.page !== null && secondTime.value === 2) {
           referrer = {file: secondTime.page, type: secondTime?.type }
           secondTime.value = 0
@@ -70,34 +67,28 @@ const fetchMarkdown = async (file: string): Promise<string> => {
         }
         break
       case (referrer && (referrer.type === 'page' || referrer.type === 'emergency-page') && checklist.type !== 'page' && activeChecklist !== null):
-        console.log('second case')
         referrer = {file: activeChecklist.file, type: activeChecklist.type }
         secondTime.value += 1
         break
       case (!referrer && secondTime.page !== null && checklist.type === 'global'):
-        console.log('no referrer and page to global')
         referrer = {file: secondTime.page, type: secondTime.type}
         secondTime.value += 1
         break
       case (!referrer && secondTime.type !== null && secondTime.page !== null):
-        console.log('is this still needed')
         referrer = {file: secondTime.page, type: secondTime.type}
         if (checklist.type === 'page') {
           secondTime = {page: checklist.file, type: checklist.type, value: 0}
         }
         break
       case (referrer && referrer.file === 'aircraft' && secondTime.value === 0 && checklist.type !== 'page'):
-        console.log('fuck me')
         secondTime.value += 1
         break
       case (referrer && secondTime.value > 0 && !secondTime.page && checklist.type === 'page'):
-        console.log('really?')
         secondTime.page = checklist.file
         secondTime.type = checklist.type
         secondTime.value = 0
         break
       case (referrer && referrer.file === 'aircraft' && checklist.type === 'page' && secondTime.value === 0 && !secondTime.page):
-        console.log('what the fuck')
         secondTime.page = checklist.file
         secondTime.type = checklist.type
         break
@@ -106,24 +97,19 @@ const fetchMarkdown = async (file: string): Promise<string> => {
         referrer = {file: activeChecklist.file, type: activeChecklist.type}
         break
       default:
-        console.log('default Checklist')
         break
       }
 
       activeChecklist = checklist
       markdownContent = await fetchMarkdown(checklist.file)
-      console.log(`out \nreferrer:`,referrer,`\n secondTime:`,secondTime,`\n checklist:`,checklist,`\n activeCheck:`,activeChecklist)
   };
 
   const handleEmergencyChecklistClick = async (checklist: EmergencyChecklist) => {
 
     const related = await filterEmergRelatedChecklists(checklist)
 
-    console.log(`in emerg\nreferrer:`,referrer,`\n secondTime:`,secondTime,`\n checklist:`,checklist,`\n activeCheck`,activeChecklist)
-
     switch(true) {
       case ( referrer && (referrer.type === 'aircraft' || referrer.type === 'emergency') && checklist.type === 'emergency' && activeChecklist !== null):
-        console.log('math part')
         if (secondTime.page !== null && secondTime.value === 2) {
           referrer = {file: secondTime.page, type: secondTime?.type }
           secondTime.page = null
@@ -146,14 +132,12 @@ const fetchMarkdown = async (file: string): Promise<string> => {
         }  
         break
       case (!referrer && secondTime.value === 0 && secondTime.page === null):
-        console.log('no ref sectime 0 sectime page null')
         secondTime.value += 1
         break
       case (referrer && referrer.file === 'aircraft' && secondTime.value === 0):
         if (activeChecklist){
           if (activeChecklist !== checklist) referrer = {file: activeChecklist.file, type: activeChecklist.type}
         } 
-        console.log('first checklist load')
         if (checklist.type === 'emergency-page') {
           secondTime = {page: checklist.file, type: checklist.type, value: 0}
         } else {
@@ -161,23 +145,19 @@ const fetchMarkdown = async (file: string): Promise<string> => {
         }
         break
       case (referrer && referrer.file === 'aircraft' && secondTime.value === 1 && activeChecklist !== null):
-        console.log('second checklist load')
         referrer = {file: activeChecklist.file, type: activeChecklist.type}
         secondTime.value += 1
         break
       case (referrer && secondTime.value > 0 && activeChecklist && activeChecklist !== checklist):
-        console.log('emer pages secondTime > 0')
         referrer = {file: activeChecklist.file, type: activeChecklist.type}
         secondTime.value += 1
         break
       default:
-        console.log('default Emerg')
         break
     }
 
     activeChecklist = checklist;
     markdownContent = await fetchMarkdown(checklist.file);
-    console.log(`out emerg\nreferrer:`,referrer,`\n secondTime:`,secondTime,`\n checklist:`,checklist,`\n activeCheck`,activeChecklist)
   };
 
   const handleGlobalPageClick = async (page: Checklist) => {
@@ -186,17 +166,13 @@ const fetchMarkdown = async (file: string): Promise<string> => {
     secondTime.value = 0
     activeChecklist = page;
     markdownContent = await fetchMarkdown(page.file);
-    console.log(`global\nreferrer:`,referrer,`\n secondTime:`,secondTime,`\n activeCheck`,activeChecklist)
   };
 
   const handleBackClick = async () => {
     emergencyRelatedChecklists = []
 
-    console.log(`in back\nreferrer:`,referrer,`\n secondTime:`,secondTime,`\n activeCheck`,activeChecklist)
-
     switch (true){
       case (referrer && referrer.file === 'aircraft'):
-        console.log('referrer is aircraft')
         if (!activeChecklist) activeAircraft = null
         referrer = null
         activeChecklist = null
@@ -205,17 +181,14 @@ const fetchMarkdown = async (file: string): Promise<string> => {
         filterHiddenEmergChecklists()
         break
       case (referrer && secondTime.value > 0):
-        console.log('referrer and secondTime.value > 0', referrer)
         const referrerChecklist = await findChecklist(referrer.file)
-        console.log(referrerChecklist);
+
         if (referrerChecklist) {
-          console.log('found referrer checklist')
           activeChecklist = referrerChecklist;
           markdownContent = await fetchMarkdown(referrerChecklist.file);
           secondTime.value -= 1
           if (secondTime.value === 0){
             if (secondTime.page !== null) {
-              console.log('loading secondTime.page')
               activeChecklist = await findChecklist(secondTime.page);
               markdownContent = await fetchMarkdown(secondTime.page);
               filterHiddenEmergChecklists(); 
@@ -225,7 +198,6 @@ const fetchMarkdown = async (file: string): Promise<string> => {
                 referrer = null; 
               }
             } else {
-              console.log('secondTime page null')
               if (activeAircraft) {
                 referrer = { file: 'aircraft', type: null }
               } else {
@@ -246,7 +218,6 @@ const fetchMarkdown = async (file: string): Promise<string> => {
         }
         break;
       case (!referrer && secondTime.page !== null && secondTime.value > 0):
-        console.log('no ref but secondTime')
         activeChecklist = await findChecklist(secondTime.page);
         markdownContent = await fetchMarkdown(secondTime.page);
         filterHiddenEmergChecklists(); 
@@ -254,11 +225,9 @@ const fetchMarkdown = async (file: string): Promise<string> => {
         secondTime = { page: null, type: null, value: 0 };
         break
       case (!referrer && secondTime.page !== null && secondTime.value === 0):
-        console.log('no ref but secondTime & secondTime  value 0')
         if (activeChecklist && activeChecklist.for) {
           const getList = await findChecklist(activeChecklist.for)
           if (getList) {
-            console.log('getList found')
             secondTime = { page: activeChecklist.for, type: getList.type, value: 0 }; 
             activeChecklist = getList; 
             markdownContent = await fetchMarkdown(getList.file); 
@@ -268,7 +237,6 @@ const fetchMarkdown = async (file: string): Promise<string> => {
               referrer = null; 
             }
           } else {
-            console.log('getList not found')
             if (activeAircraft) {
               referrer = { file: 'aircraft', type: null }
               secondTime = { page: null, type: null, value: 0 }; 
@@ -301,7 +269,6 @@ const fetchMarkdown = async (file: string): Promise<string> => {
         }
         break
       default:
-        console.log('default back')
         activeAircraft = null
         activeChecklist = null
         markdownContent = null
@@ -309,7 +276,6 @@ const fetchMarkdown = async (file: string): Promise<string> => {
         secondTime = { page: null, type: null, value: 0 }; 
         break;   
     }    
-    console.log(`out back\nreferrer:`,referrer,`\n secondTime:`,secondTime,`\n activeCheck`,activeChecklist)
   };
 
 async function findChecklist(filename: string): Promise<Checklist | null> {
