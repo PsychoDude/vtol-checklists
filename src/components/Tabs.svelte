@@ -109,7 +109,7 @@
                 secondTime.value = 1
                 break
               case (secondTime.value === 2 && !secondTime.page):
-                activeAircraft ? referrer = {file: 'aircraft', type: null} : referrer = null
+                referrer = {file: activeChecklist.file, type: activeChecklist.type}
                 secondTime.value = 1
                 break
               default:
@@ -206,7 +206,7 @@
                 secondTime.value = 1
                 break
               case (secondTime.value === 2 && !secondTime.page):
-                activeAircraft ? referrer = {file: 'aircraft', type: null} : referrer = null
+                referrer = {file: activeChecklist.file, type: activeChecklist.type}
                 secondTime.value = 1
                 break
               default:
@@ -308,7 +308,6 @@
       case (referrer && secondTime.value === 2):
         switch (true){
           case (referrer.file === 'aircraft' && activeAircraft !== null):
-            referrer = null
             activeChecklist = null
             markdownContent = null
             secondTime = { page: null, type: null, value: 0 };
@@ -339,7 +338,6 @@
       case (referrer && secondTime.value === 1):
         switch (true){
           case (referrer.file === 'aircraft' && activeAircraft !== null):
-            referrer = null
             activeChecklist = null
             markdownContent = null
             secondTime = { page: null, type: null, value: 0 };
@@ -347,25 +345,79 @@
             break
           case (referrer.type === 'page' || referrer.type === 'emergency-page'):
             switch (true) {
-              case (secondTime.page !== null):
+              case (secondTime.page !== null && secondTime.page !== referrer.file):
                 activeChecklist = await findChecklist(referrer.file)
                 markdownContent = await fetchMarkdown(referrer.file)
-                referrer = {file: secondTime.page, type: secondTime.page}
+                referrer = {file: secondTime.page, type: secondTime.type}
                 secondTime.value -= 1
                 filterHiddenEmergChecklists()
                 activeChecklist && (activeChecklist.type === 'emergency' || activeChecklist.type === 'emergency-page') ? filterEmergRelatedChecklists(activeChecklist) : null
                 break
+              case (secondTime.page !== null && secondTime.page === referrer.file):
+                const theList = await findChecklist(referrer.file)
+                if (theList) {
+                  console.log('fired')
+                  switch (true) {
+                    case (theList.for !== undefined):
+                      if (theList.type === 'page' || theList.type === 'emergency-page'){ 
+                        const forList = await findChecklist(theList.for)
+                        if (forList) {
+                          referrer = {file: forList.file, type: forList.type}
+                        } else {
+                          activeAircraft ? referrer = {file: 'aircraft', type: null} : referrer = null
+                        }
+                        secondTime = {page: theList.file, type: theList.type, value: 0}
+                        activeChecklist = theList
+                        markdownContent = await fetchMarkdown(theList.file)
+                        filterHiddenEmergChecklists()
+                        activeChecklist && (activeChecklist.type === 'emergency' || activeChecklist.type === 'emergency-page') ? filterEmergRelatedChecklists(activeChecklist) : null
+                      } else if (theList.for === 'carrier') {
+                        secondTime = {page: theList.file, type: theList.type, value: 0}
+                        activeAircraft ? referrer = {file: 'aircraft', type: null} : referrer = null
+                        activeChecklist = theList
+                        markdownContent = await fetchMarkdown(theList.file)
+                        filterHiddenEmergChecklists()
+                        activeChecklist && (activeChecklist.type === 'emergency' || activeChecklist.type === 'emergency-page') ? filterEmergRelatedChecklists(activeChecklist) : null
+                      } else {
+                        console.log('wtf else?')
+                      }
+                      break
+                    default:
+                      console.log('here right?')
+                      console.log(activeChecklist && activeChecklist.for !== undefined)
+                      activeChecklist = await findChecklist(referrer.file)
+                      markdownContent = await fetchMarkdown(referrer.file)
+                      activeAircraft ? referrer = {file: 'aircraft', type: null} : referrer = null
+                      secondTime.value -= 1
+                      filterHiddenEmergChecklists()
+                      activeChecklist && (activeChecklist.type === 'emergency' || activeChecklist.type === 'emergency-page') ? filterEmergRelatedChecklists(activeChecklist) : null
+                      break
+                  }
                 }
+                break
+              default:
+                break
+            }
             break
-          default:
+          case (referrer.type === 'aircraft' && secondTime.page === null):
             activeChecklist = await findChecklist(referrer.file)
             markdownContent = await fetchMarkdown(referrer.file)
             activeAircraft ? referrer = {file: 'aircraft', type: null} : referrer = null
             secondTime.value -= 1
             filterHiddenEmergChecklists()
             activeChecklist && (activeChecklist.type === 'emergency' || activeChecklist.type === 'emergency-page') ? filterEmergRelatedChecklists(activeChecklist) : null
-          }
-          break
+            break
+          default:
+            console.log('default somewhere')
+            activeChecklist = await findChecklist(referrer.file)
+            markdownContent = await fetchMarkdown(referrer.file)
+            activeAircraft ? referrer = {file: 'aircraft', type: null} : referrer = null
+            secondTime.value -= 1
+            filterHiddenEmergChecklists()
+            activeChecklist && (activeChecklist.type === 'emergency' || activeChecklist.type === 'emergency-page') ? filterEmergRelatedChecklists(activeChecklist) : null
+            break
+        }
+        break
       case (referrer && secondTime.value === 0):
         switch (true) {
           case (referrer.type === 'page' || referrer.type === 'emergency-page'):
@@ -373,10 +425,20 @@
               case (secondTime.page !== null):
                 activeChecklist = await findChecklist(referrer.file)
                 markdownContent = await fetchMarkdown(referrer.file)
-                referrer = {file: secondTime.page, type: secondTime.type}
-                secondTime = {page: null, type: null, value: 0}
+                switch (true) {
+                  case (secondTime.page === referrer.file):
+                    activeAircraft ? referrer = {file: 'aircraft', type: null} : referrer = null
+                    break
+                  default:
+                    referrer = {file: secondTime.page, type: secondTime.type}
+                    activeAircraft ? referrer = {file: 'aircraft', type: null} : referrer = null
+                    break
+                }
                 filterHiddenEmergChecklists()
                 activeChecklist && (activeChecklist.type === 'emergency' || activeChecklist.type === 'emergency-page') ? filterEmergRelatedChecklists(activeChecklist) : null
+                break
+              case (secondTime.page === null && activeChecklist && activeChecklist.for !== undefined ):
+                console.log('BOOM')
                 break
               default:
                 activeChecklist = await findChecklist(referrer.file)
@@ -386,6 +448,18 @@
                 activeChecklist && (activeChecklist.type === 'emergency' || activeChecklist.type === 'emergency-page') ? filterEmergRelatedChecklists(activeChecklist) : null
                 break
             }
+            break
+          case (referrer.file === 'aircraft' && activeChecklist !== null):
+            activeChecklist = null
+            markdownContent = null
+            secondTime = {page: null, type: null, value: 0}
+            filterHiddenEmergChecklists()
+            break
+          default:
+            activeAircraft = null
+            activeChecklist = null
+            markdownContent = null
+            secondTime = {page: null, type: null, value: 0}
             break
         }
         break
