@@ -10,7 +10,7 @@ The commands are as follows:
 -   You’re too High - Descend. Reduce throttle to compensate for excess altitude
 -   You’re Fast - Slow Down. Reduce throttle to compensate for excess speed
 -   You’re Slow - Speed Up. Increase throttle to compensate for lack of speed
--   Wave Off! - WAVE OFF IMMEDIATELY, RE-ENTER A HOLDING PATTERN TO THE LEFT. SEE NEXT PAGE FOR PROCEDURES
--   Bolter! - You’ve touched the deck but missed the wires - go around! SEE BELOW FOR PROCEDURE
+-   Wave Off! - WAVE OFF IMMEDIATELY, RE-ENTER A HOLDING PATTERN TO THE LEFT. SEE WAVE OFF IN RELATED CHECKLISTS
+-   Bolter! - You’ve touched the deck but missed the wires - go around! SEE WAVE OFF IN RELATED CHECKLISTS
 
 <br>

@@ -1,4 +1,4 @@
-# F/A-26B Emergency Engine Failure Checklist
+# EF-24G Emergency Engine Failure Checklist
 
 1.  Start APU
 2.  Jettison ALL
@@ -23,7 +23,7 @@
     > **CAUTION:**
 
     <div style="border-left: 4px solid #d8222b; padding-left: 15px; margin-bottom: 20px;">
-      If critical damage has been inflicted to the engine(s), restart may not be successful. Keep the APU on and attempt to land the aircraft or see &lt; 5000ft procedures (Step 4).
+        If critical damage has been inflicted to the engine(s), restart may not be successful. Keep the APU on and attempt to land the aircraft or see &lt; 5000ft procedures (Step 4).
     </div>
 
     <br>

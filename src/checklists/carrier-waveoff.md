@@ -1,4 +1,4 @@
-# Wave Off Procedure
+# Wave Off Checklist
 
 On Wave Off/Bolter Callout:
 
@@ -10,6 +10,6 @@ On Wave Off/Bolter Callout:
 
 <br>
 
-After Procedure Complete, See Landing (CASE 1) Checklist.
+After Checklist Complete, See Landing (CASE 1) Checklist.
 
 <br>

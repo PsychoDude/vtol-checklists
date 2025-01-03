@@ -1,4 +1,4 @@
-# F/A-26B Emergency Flight Controls Failure Checklist
+# EF-24G Emergency Flight Controls Failure Checklist
 
 # **Alternate Control Methods:**
 

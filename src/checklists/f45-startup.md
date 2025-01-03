@@ -1,4 +1,4 @@
-# F-45A Startup Procedure
+# F-45A Startup Checklist
 
 1. Start BATTERY.
 2. Close CANOPY.

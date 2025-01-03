@@ -1,4 +1,4 @@
-# F/A-26B Runway Takeoff Procedure
+# F/A-26B Runway Takeoff Checklist
 
 1. Set Flaps 1
 2. Set Parking Brake ON

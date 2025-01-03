@@ -1,4 +1,4 @@
-# F-45A Short Takeoff Procedure
+# F-45A Short Takeoff Checklist
 
 1. Set engine TILT to 35 degrees.
 2. Brakes HOLD.
