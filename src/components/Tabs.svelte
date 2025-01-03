@@ -395,21 +395,23 @@ async function findChecklist(filename: string): Promise<Checklist | null> {
   {#if !activeAircraft && !activeChecklist}
     <!-- Aircraft selection -->
     <div class="flex space-x-4">
-      {#each checklists as checklist}
+      <div class="grid grid-cols-3 gap-4">
+        {#each checklists as checklist}
         {#if checklist.hidden !== true}
-        <button class="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white rounded" on:click={() => handleAircraftClick(checklist.aircraft)}>
+        <button class="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white rounded h-70" on:click={() => handleAircraftClick(checklist.aircraft)}>
           {checklist.aircraft}
         </button>
         {/if}  
-      {/each}
-
-      {#each globalPublicPages as globalPage}
+        {/each}
+        
+        {#each globalPublicPages as globalPage}
         {#if globalPage.hidden !== true && globalPage.type === 'page' && globalPage.showGlobal }
-        <button class="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded" on:click={() => handleGlobalPageClick(globalPage)}>
+        <button class="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded h-70" on:click={() => handleGlobalPageClick(globalPage)}>
           {globalPage.name}
         </button>
         {/if}  
-      {/each}
+        {/each}
+      </div>
     </div>
   {:else if !activeChecklist}
     <!-- Checklist selection for the chosen aircraft -->
