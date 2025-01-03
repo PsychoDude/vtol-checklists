@@ -249,6 +249,7 @@ const fetchMarkdown = async (file: string): Promise<string> => {
         console.log('no ref but secondTime')
         activeChecklist = await findChecklist(secondTime.page);
         markdownContent = await fetchMarkdown(secondTime.page);
+        filterHiddenEmergChecklists(); 
         referrer = null; 
         secondTime = { page: null, type: null, value: 0 };
         break
@@ -287,11 +288,12 @@ const fetchMarkdown = async (file: string): Promise<string> => {
             referrer = null; 
           }
         }
-        
+        filterHiddenEmergChecklists(); 
         break
       case (referrer && referrer.file !== 'aircraft' && secondTime.value === 0 && !secondTime.page):
         activeChecklist = await findChecklist(referrer.file)
         markdownContent = await fetchMarkdown(referrer.file); 
+        filterHiddenEmergChecklists(); 
         if (activeAircraft) {
           referrer = { file: 'aircraft', type: null }
         } else {
