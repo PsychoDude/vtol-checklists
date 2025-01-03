@@ -43,6 +43,7 @@ const fetchMarkdown = async (file: string): Promise<string> => {
   };
 
   const handleChecklistClick = async (checklist: Checklist) => {
+    console.log(`in\nreferrer:`,referrer,`\n secondTime:`,secondTime,`\n checklist:`,checklist,`\n activeCheck`,activeChecklist)
     emergencyRelatedChecklists = []
     emergenciesShowChecklists = []
     
@@ -52,15 +53,8 @@ const fetchMarkdown = async (file: string): Promise<string> => {
           referrer = {file: secondTime.page, type: secondTime?.type }
           secondTime.value = 0
         } else if (!secondTime.page && secondTime.value === 2) {
-          if (activeAircraft !== null) {
-           referrer = {file: 'aircraft', type: null }
-           secondTime.value = 0
-           secondTime.type = null
-          } else {
-            referrer = null
-            secondTime.type = null
-            secondTime.value = 0   
-          }
+          referrer = {file: activeChecklist.file, type: activeChecklist.type}
+          secondTime.value = 0
         } else {
           referrer = {file: activeChecklist.file, type: activeChecklist.type }
           secondTime.value += 1
@@ -102,14 +96,15 @@ const fetchMarkdown = async (file: string): Promise<string> => {
 
       activeChecklist = checklist
       markdownContent = await fetchMarkdown(checklist.file)
+      console.log(`out\nreferrer:`,referrer,`\n secondTime:`,secondTime,`\n checklist:`,checklist,`\n activeCheck`,activeChecklist)
   };
 
   const handleEmergencyChecklistClick = async (checklist: EmergencyChecklist) => {
-
+    console.log(`in emerg\nreferrer:`,referrer,`\n secondTime:`,secondTime,`\n checklist:`,checklist,`\n activeCheck`,activeChecklist)
     const related = await filterEmergRelatedChecklists(checklist)
 
     switch(true) {
-      case ( referrer && (referrer.type === 'aircraft' || referrer.type === 'emergency') && checklist.type === 'emergency' && activeChecklist !== null):
+      case ( referrer && (referrer.type === 'aircraft' || referrer.type === 'emergency'|| referrer.type === 'emergency-page') && checklist.type === 'emergency' && activeChecklist !== null):
         if (secondTime.page !== null && secondTime.value === 2) {
           referrer = {file: secondTime.page, type: secondTime?.type }
           secondTime.page = null
@@ -158,6 +153,8 @@ const fetchMarkdown = async (file: string): Promise<string> => {
 
     activeChecklist = checklist;
     markdownContent = await fetchMarkdown(checklist.file);
+
+    console.log(`out emerg\nreferrer:`,referrer,`\n secondTime:`,secondTime,`\n checklist:`,checklist,`\n activeCheck`,activeChecklist)
   };
 
   const handleGlobalPageClick = async (page: Checklist) => {
@@ -169,18 +166,20 @@ const fetchMarkdown = async (file: string): Promise<string> => {
   };
 
   const handleBackClick = async () => {
+    console.log(`in back\nreferrer:`,referrer,`\n secondTime:`,secondTime,`\n activeCheck`,activeChecklist)
     emergencyRelatedChecklists = []
 
     switch (true){
       case (referrer && referrer.file === 'aircraft'):
         if (!activeChecklist) activeAircraft = null
-        referrer = null
+        activeAircraft ? referrer = { file: 'aircraft', type: null }  : referrer = null
         activeChecklist = null
         markdownContent = null
         secondTime = { page: null, type: null, value: 0 }; 
         filterHiddenEmergChecklists()
         break
       case (referrer && secondTime.value > 0):
+        const oldChecklist = activeChecklist
         const referrerChecklist = await findChecklist(referrer.file)
 
         if (referrerChecklist) {
@@ -210,12 +209,29 @@ const fetchMarkdown = async (file: string): Promise<string> => {
           } else if  (!secondTime.page && secondTime.value === 1) {
               secondTime.value = 0;
               activeAircraft ? referrer = { file: 'aircraft', type: null }  : referrer = null
-   
-          } else {
+          } else if (secondTime.page !== null && secondTime.value === 1 && secondTime.type === 'emergency-page') {
+            referrer = {file: secondTime.page, type: secondTime.type};
+            secondTime.value = 0;
+          } else{
+            console.log('here')
             if (referrer.type === 'emergency-page' || referrer.type === 'page') {
               if (activeAircraft){
                 secondTime = { page: referrer.file, type: referrer.type, value: 0 };
                 referrer = { file: 'aircraft', type: null }
+              } else {
+                referrer = null;
+              }
+            } else {
+              if (secondTime.page !== null && referrer.file === oldChecklist?.file ) {
+                activeAircraft ? referrer = { file: 'aircraft', type: null } : referrer = null;
+                activeChecklist = await findChecklist(secondTime.page)
+                markdownContent = await fetchMarkdown(secondTime.page);
+                filterHiddenEmergChecklists();
+                if (activeChecklist) filterEmergRelatedChecklists(activeChecklist)
+                console.log('hamburgers')
+              } else if (secondTime.page !== null){
+                referrer = {file: secondTime.page, type: secondTime.type};
+                secondTime = { page: null, type: null, value: 0 };
               } else {
                 referrer = null;
               }
@@ -288,6 +304,12 @@ const fetchMarkdown = async (file: string): Promise<string> => {
             }
             filterHiddenEmergChecklists();
             if (activeChecklist) filterEmergRelatedChecklists(activeChecklist)
+          } else if (activeChecklist && activeChecklist.for === 'aircraft') {
+            activeAircraft ? referrer = { file: 'aircraft', type: null }  : referrer = null
+            secondTime = { page: null, type: null, value: 0 }
+            activeChecklist = null
+            markdownContent = null
+            filterHiddenEmergChecklists();
           }
         } else {
           activeChecklist = await findChecklist(referrer.file)
@@ -319,7 +341,7 @@ const fetchMarkdown = async (file: string): Promise<string> => {
       case (!referrer && !secondTime.page && activeChecklist !== null):
         activeChecklist = null
         markdownContent = null
-        referrer = null; 
+        activeAircraft ? referrer = { file: 'aircraft', type: null }  : referrer = null
         secondTime = { page: null, type: null, value: 0 }; 
         break
       default: 
@@ -330,6 +352,7 @@ const fetchMarkdown = async (file: string): Promise<string> => {
         secondTime = { page: null, type: null, value: 0 }; 
         break;   
     }
+    console.log(`out back\nreferrer:`,referrer,`\n secondTime:`,secondTime,`\n activeCheck`,activeChecklist)
   };
 
 async function findChecklist(filename: string): Promise<Checklist | null> {
