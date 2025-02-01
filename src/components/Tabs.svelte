@@ -9,7 +9,9 @@
   let activeChecklist: Checklist | null = null;
   let markdownContent: string | Promise<string> | null = null;
   let referrer: {file: string, type: string | null} | null = null;
-  let globalPublicPages: ChecklistItem[] = checklists.find(checklist => checklist.aircraft === 'carrier')?.checklists || [];
+  let globalCarrierPages: ChecklistItem[] = checklists.find(checklist => checklist.aircraft === 'carrier')?.checklists || [];
+  let globalInfoPages: ChecklistItem[] = checklists.find(checklist => checklist.aircraft === 'info')?.checklists || [];
+  let globalPages: ChecklistItem[] = globalCarrierPages.concat(globalInfoPages)
   let emergencyRelatedChecklists: ChecklistItem[] = [];
   let emergenciesShowChecklists: EmergencyChecklist[] = [];
   let emergenciesHiddenChecklists: EmergencyChecklist[] = [];
@@ -124,7 +126,7 @@
         break
       default:
         switch (true){
-          case (activeChecklist && activeChecklist.for === 'carrier'):
+          case (activeChecklist && (activeChecklist.for === 'carrier' || activeChecklist.for === 'info') ):
             referrer = {file: activeChecklist.file, type: activeChecklist.type}
           break
           default:
@@ -276,6 +278,12 @@
                         filterHiddenEmergChecklists()
                         activeChecklist && (activeChecklist.type === 'emergency' || activeChecklist.type === 'emergency-page') ? filterEmergRelatedChecklists(activeChecklist) : null
                       } else {
+                        secondTime = {page: theList.file, type: theList.type, value: 0}
+                        activeAircraft ? referrer = {file: 'aircraft', type: null} : referrer = null
+                        activeChecklist = theList
+                        markdownContent = await fetchMarkdown(theList.file)
+                        filterHiddenEmergChecklists()
+                        activeChecklist && (activeChecklist.type === 'emergency' || activeChecklist.type === 'emergency-page') ? filterEmergRelatedChecklists(activeChecklist) : null
                       }
                       break
                     default:
@@ -380,7 +388,7 @@
         {/if}  
         {/each}
         
-        {#each globalPublicPages as globalPage}
+        {#each globalPages as globalPage}
         {#if globalPage.hidden !== true && globalPage.type === 'page' && globalPage.showGlobal }
         <button class="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded h-70" on:click={() => handleGlobalPageClick(globalPage)}>
           {globalPage.name}
@@ -425,7 +433,7 @@
       <!-- Display Carrier Knowledge/Checklists -->
       <div class="flex flex-col space-y-2">
         {#each checklists as checklist}
-        {#if checklist.aircraft === 'carrier' }
+        {#if checklist.aircraft === 'carrier' || checklist.aircraft === 'info'}
           {#each checklist.checklists as subchecklist}
           {#if (subchecklist.type === 'global' && !subchecklist.hidden) || (subchecklist.type === 'page' && subchecklist.hidden)}
           <button class="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded" on:click={() => handleChecklistClick(subchecklist)}>
