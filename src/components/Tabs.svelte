@@ -375,11 +375,11 @@
 
 </script>
 
-<div class="container mx-auto p-4">
+<div class="container lg:container mx-auto p-4">
   {#if !activeAircraft && !activeChecklist}
     <!-- Aircraft selection -->
     <div class="flex space-x-4">
-      <div class="grid grid-cols-3 gap-4">
+      <div class="grid grid-cols-3 gap-4 mx-auto">
         {#each checklists as checklist}
         {#if checklist.hidden !== true}
         <button class="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white rounded h-70" on:click={() => handleAircraftClick(checklist.aircraft)}>
