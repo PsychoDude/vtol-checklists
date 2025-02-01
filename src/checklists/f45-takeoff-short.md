@@ -13,7 +13,7 @@
 
 > **CAUTION:**
 
-<div style="border-left: 4px solid #d8222b; padding-left: 15px; margin-bottom: 20px;">
+<div class="border-s-4 border-red-700 ps-4 mb-5">
     For all V/STOVL operations, a <u>TWR above 0.95</u> is necessary.
 </div>
 
