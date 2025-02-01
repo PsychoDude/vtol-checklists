@@ -26,9 +26,8 @@
 
 <div style="border-left: 4px solid #a0e33b; padding-left: 15px; margin-bottom: 20px;">
     Adequate RPM is required before starting the engine.  Attempting to ignite the engine before the APU is at RUN RPM up will lead to flame out and possible engine damage.
-
+    <br><br>
     In the event of ignition failure, shut down the engine, and confirm APU RPM NOMINAL. Once NOMINAL, repeat steps 5 and 6.
-
 </div>
 
 <br>
@@ -36,7 +35,9 @@
 > **CAUTION:**
 
 <div style="border-left: 4px solid #d8222b; padding-left: 15px; margin-bottom: 20px;">
-    Nominal refers to the RPM being in the green zone of the dial. Starting engines before the APU is fully spun up will lead to ignition failure. In the event of ignition failure, shut down both engines, and confirm APU RPM NOMINAL. Once NOMINAL, repeat steps 4 and 5.
+    Nominal refers to the RPM being in the green zone of the dial. Starting engines before the APU is fully spun up will lead to ignition failure. 
+    <br><br>
+    In the event of ignition failure, shut down both engines, and confirm APU RPM NOMINAL. Once NOMINAL, repeat steps 4 and 5.
 </div>
 
 <br>
