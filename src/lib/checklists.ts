@@ -542,6 +542,35 @@ export const checklists = [
 			},
 		],
 	},
+	{
+		aircraft: 'info',
+		hidden: true,
+		checklists: [
+			{
+				type: 'page',
+				name: 'Global',
+				file: 'global.md',
+				related: ['audio-cues.md', 'rwr.md'],
+				for: 'info',
+				showGlobal: true,
+				hidden: false,
+			},
+			{
+				type: 'global',
+				name: 'Audio Cues',
+				file: 'audio-cues.md',
+				showGlobal: true,
+				hidden: false,
+			},
+			{
+				type: 'global',
+				name: 'RWR',
+				file: 'rwr.md',
+				showGlobal: true,
+				hidden: false,
+			},
+		],
+	},
 ]
 
 export const emergencyChecklists = [
