@@ -5,19 +5,19 @@
   import { emergencyChecklists } from '$lib/checklists'
 
   export let checklists: AircraftChecklists[];
+  const aircraftNames: string[] = ['F-45A', 'F/A-26B', 'EF-24G', 'AH-94', 'T-55']
+  const checklistTypes: string[] = ['global', 'info', 'important']
   let activeAircraft: string | null = null;
   let activeChecklist: Checklist | null = null;
   let markdownContent: string | Promise<string> | null = null;
   let referrer: {file: string, type: string | null} | null = null;
-  let globalCarrierPages: ChecklistItem[] = checklists.find(checklist => checklist.aircraft === 'carrier')?.checklists || [];
-  let globalInfoPages: ChecklistItem[] = checklists.find(checklist => checklist.aircraft === 'info')?.checklists || [];
-  let globalPages: ChecklistItem[] = globalCarrierPages.concat(globalInfoPages)
+  let globalPagesArray: AircraftChecklists[] = checklists.filter(checklist => !aircraftNames.includes(checklist.aircraft)) || [];
+  let importantPages: ChecklistItem[] = globalPagesArray.filter(page => page.aircraft === 'global')[0].checklists.filter(checklist => checklist.type === 'important') || [];
   let emergencyRelatedChecklists: ChecklistItem[] = [];
   let emergenciesShowChecklists: EmergencyChecklist[] = [];
   let emergenciesHiddenChecklists: EmergencyChecklist[] = [];
-  let importantPages: ChecklistItem[] = globalInfoPages.filter(page => page.type === 'important') || [];
   let secondTime:{ value: number, page: string | null, type: string | null } = { value: 0, page: null, type: null };
-
+  
   $: hasRelatedChecklists = !!(activeChecklist?.related?.length || (activeChecklist?.showEmergencies && emergencyChecklists.find(item => item.aircraft === activeAircraft)?.checklists?.length) || (activeAircraft && activeChecklist && activeChecklist.type === 'emergency'));
 
   const fetchMarkdown = async (file: string): Promise<string> => { 
@@ -128,7 +128,7 @@
         break
       default:
         switch (true){
-          case (activeChecklist && (activeChecklist.for === 'carrier' || activeChecklist.for === 'info') ):
+          case (activeChecklist && (activeChecklist.for === 'carrier' || activeChecklist.for === 'global') ):
             referrer = {file: activeChecklist.file, type: activeChecklist.type}
           break
           default:
@@ -401,12 +401,14 @@
         {/if}  
         {/each}
         
-        {#each globalPages as globalPage}
+        {#each globalPagesArray as globalPages}
+        {#each globalPages.checklists as globalPage}
         {#if globalPage.hidden !== true && globalPage.type === 'page' && globalPage.showGlobal }
         <button class="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded h-70" on:click={() => handleGlobalPageClick(globalPage)}>
           {globalPage.name}
         </button>
         {/if}  
+        {/each}
         {/each}
       </div>
     </div>
@@ -446,7 +448,7 @@
       <!-- Display Carrier Knowledge/Checklists -->
       <div class="flex flex-col space-y-2">
         {#each checklists as checklist}
-        {#if checklist.aircraft === 'carrier' || checklist.aircraft === 'info'}
+        {#if checklist.aircraft === 'carrier' || checklist.aircraft === 'global'}
           {#each checklist.checklists as subchecklist}
           {#if (subchecklist.type === 'global' && !subchecklist.hidden) || (subchecklist.type === 'page' && subchecklist.hidden)}
           <button class="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded" on:click={() => handleChecklistClick(subchecklist)}>
@@ -472,7 +474,7 @@
                   {@const match = relatedChecklist.file === relatedFile}
                   {#if match}
                     <button class="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded" on:click={() => handleChecklistClick(relatedChecklist)}>
-                      {relatedChecklist.type === 'global' || relatedChecklist.type === 'important' || (relatedChecklist.type === 'page' && relatedChecklist.for !== 'aircraft') ? relatedChecklist.name : `${relatedChecklist.name} (${activeAircraft})`}
+                      { checklistTypes.includes(relatedChecklist.type) || (relatedChecklist.type === 'page' && relatedChecklist.for !== 'aircraft') ? relatedChecklist.name : `${relatedChecklist.name} (${activeAircraft})`}
                     </button>
                   {/if}
                 {/each}

@@ -551,7 +551,7 @@ export const checklists = [
 		],
 	},
 	{
-		aircraft: 'info',
+		aircraft: 'global',
 		hidden: true,
 		checklists: [
 			{
@@ -559,19 +559,19 @@ export const checklists = [
 				name: 'Global',
 				file: 'global.md',
 				related: ['audio-cues.md', 'rwr.md'],
-				for: 'info',
+				for: 'global',
 				showGlobal: true,
 				hidden: false,
 			},
 			{
-				type: 'global',
+				type: 'info',
 				name: 'Audio Cues',
 				file: 'audio-cues.md',
 				showGlobal: true,
 				hidden: false,
 			},
 			{
-				type: 'global',
+				type: 'info',
 				name: 'RWR',
 				file: 'rwr.md',
 				showGlobal: true,
