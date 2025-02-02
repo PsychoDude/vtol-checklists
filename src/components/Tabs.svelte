@@ -375,7 +375,7 @@
 
 </script>
 
-<div class="container lg:container mx-auto p-4">
+<div class="container mx-auto p-4">
   {#if !activeAircraft && !activeChecklist}
     <!-- Aircraft selection -->
     <div class="flex space-x-4">
