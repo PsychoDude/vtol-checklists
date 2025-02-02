@@ -2,7 +2,7 @@
 
 <br>
 
-## **Targeting Pod (TGP)**
+## **Targeting Pod (EOTS)**
 
 **Air-to-Ground:**
 
@@ -18,12 +18,12 @@
 
 **Air-to-Air:**
 
--   AIM-120D: 5-25nm - Semi-Active Radar Homing
 -   AIM-9+: Short - Infrared Guided Missile
+-   AIM-120D: 5-25nm - Semi-Active Radar Homing
 
 <br>
 
-## **GPS (TGP or TSD)**
+## **GPS (EOTS or TSD)**
 
 **Cruise Missile:**
 

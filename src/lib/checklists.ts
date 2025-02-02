@@ -205,6 +205,14 @@ export const checklists = [
 				showGlobal: true,
 				showEmergencies: true,
 			},
+			{
+				type: 'aircraft',
+				name: 'Weapons',
+				file: 'f26-weapons.md',
+				hidden: false,
+				showGlobal: true,
+				showEmergencies: true,
+			},
 		],
 	},
 	{
