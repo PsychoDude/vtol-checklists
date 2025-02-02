@@ -15,6 +15,7 @@
   let emergencyRelatedChecklists: ChecklistItem[] = [];
   let emergenciesShowChecklists: EmergencyChecklist[] = [];
   let emergenciesHiddenChecklists: EmergencyChecklist[] = [];
+  let importantPages: ChecklistItem[] = globalInfoPages.filter(page => page.type === 'important') || [];
   let secondTime:{ value: number, page: string | null, type: string | null } = { value: 0, page: null, type: null };
 
   $: hasRelatedChecklists = !!(activeChecklist?.related?.length || (activeChecklist?.showEmergencies && emergencyChecklists.find(item => item.aircraft === activeAircraft)?.checklists?.length) || (activeAircraft && activeChecklist && activeChecklist.type === 'emergency'));
@@ -471,7 +472,7 @@
                   {@const match = relatedChecklist.file === relatedFile}
                   {#if match}
                     <button class="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded" on:click={() => handleChecklistClick(relatedChecklist)}>
-                      {relatedChecklist.type === 'global' || (relatedChecklist.type === 'page' && relatedChecklist.for !== 'aircraft') ? relatedChecklist.name : `${relatedChecklist.name} (${activeAircraft})`}
+                      {relatedChecklist.type === 'global' || relatedChecklist.type === 'important' || (relatedChecklist.type === 'page' && relatedChecklist.for !== 'aircraft') ? relatedChecklist.name : `${relatedChecklist.name} (${activeAircraft})`}
                     </button>
                   {/if}
                 {/each}
@@ -531,5 +532,16 @@
       <img style="height:12px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt="">
     </a>
   </p>
+  {#if importantPages}
+  <div class="flex gap-3 justify-center">
+    {#each importantPages as importantPage}
+    <p>
+      <button class="text-sm" on:click={() => handleChecklistClick(importantPage)}>
+        {importantPage.name}
+      </button>
+    </p>
+    {/each}
+  </div>
+  {/if}
 </div>
 </div>

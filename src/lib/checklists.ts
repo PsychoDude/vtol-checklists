@@ -558,12 +558,7 @@ export const checklists = [
 				type: 'page',
 				name: 'Global',
 				file: 'global.md',
-				related: [
-					'audio-cues.md',
-					'rwr.md',
-					'credits.md',
-					'licenses.md',
-				],
+				related: ['audio-cues.md', 'rwr.md'],
 				for: 'info',
 				showGlobal: true,
 				hidden: false,
@@ -583,7 +578,7 @@ export const checklists = [
 				hidden: false,
 			},
 			{
-				type: 'global',
+				type: 'important',
 				name: 'Credits',
 				file: 'credits.md',
 				related: ['licenses.md'],
@@ -591,7 +586,7 @@ export const checklists = [
 				hidden: false,
 			},
 			{
-				type: 'global',
+				type: 'important',
 				name: 'Licenses',
 				file: 'licenses.md',
 				related: ['credits.md'],
