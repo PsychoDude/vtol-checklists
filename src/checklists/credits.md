@@ -74,3 +74,5 @@ The information found in this app was gathered from multiple sources
 -   [CAW - Case 3 Operations](https://docs.google.com/document/d/11gUgshqHGJKlRgmRFDWvU2P5tymrY0gbheKaAdNFehU/edit?usp=sharing)
 -   [VTOL VR Wiki](https://vtolvr.wiki.gg/wiki/VTOL_VR_Wiki)
 -   PsychoDude - Missing EF-24G Emergency Checklists
+
+<br>

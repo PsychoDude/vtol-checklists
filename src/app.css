@@ -31,3 +31,7 @@ ol > li > ol {
 ol > li > ol > li > ol {
 	list-style: lower-roman;
 }
+
+a {
+	text-decoration: underline;
+}
