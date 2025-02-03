@@ -18,11 +18,11 @@
 
 ### **Air-to-Air:**
 
-**Radar Guided**
-
 -   AIM-120D: 5-25nm - Advanced Active Radar Homing + HOJ + MADDOG
 
-**Heat Seeker**
+<br>
+
+## **Air-to-Air Heat Seeker**
 
 -   AIM-9+: Short - Infrared Guided Missile
 

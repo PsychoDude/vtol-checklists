@@ -13,13 +13,13 @@
 
 ### **Air-to-Air:**
 
-**Radar Guided**
-
--   AIM-7: Medium - Semi-Active Radar Homing (B/B Safe)
+-   AIM-7: Medium - Semi-Active Radar Homing (B/B Safe) + HOJ
 -   AIM-54: Medium-Long - Active Radar Homing
 -   AIM-120D: 5-25nm - Advanced Active Radar Homing + HOJ + MADDOG
 
-**Heat Seeker**
+<br>
+
+## **Air-to-Air Heat Seeker**
 
 -   AIM-9E: 6-7nm - Rear-Aspect Infrared Guided Missile
 -   AIM-9+: Short - Infrared Guided Missile
