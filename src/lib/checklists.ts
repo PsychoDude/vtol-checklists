@@ -483,6 +483,14 @@ export const checklists = [
 				showGlobal: true,
 				showEmergencies: false,
 			},
+			{
+				type: 'aircraft',
+				name: 'Weapons',
+				file: 't55-weapons.md',
+				hidden: false,
+				showGlobal: true,
+				showEmergencies: true,
+			},
 		],
 	},
 	{
