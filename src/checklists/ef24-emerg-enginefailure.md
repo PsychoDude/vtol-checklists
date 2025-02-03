@@ -22,7 +22,7 @@
 
     > **CAUTION:**
 
-    <div style="border-left: 4px solid #d8222b; padding-left: 15px; margin-bottom: 20px;">
+    <div class="border-s-4 border-red-700 ps-4 mb-5">
         If critical damage has been inflicted to the engine(s), restart may not be successful. Keep the APU on and attempt to land the aircraft or see &lt; 5000ft procedures (Step 4).
     </div>
 

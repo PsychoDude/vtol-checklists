@@ -13,7 +13,7 @@
 
 > **NOTE:**
 
-<div style="border-left: 4px solid #a0e33b; padding-left: 15px; margin-bottom: 20px;">
+<div class="border-s-4 border-green-500 ps-4 mb-5">
     Unlike with USAF aircraft, flaring is not strictly required, as the F-45A features strong landing gear designed for high-stress carrier landings.
 </div>
 

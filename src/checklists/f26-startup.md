@@ -18,8 +18,10 @@
 
 > **CAUTION:**
 
-<div style="border-left: 4px solid #d8222b; padding-left: 15px; margin-bottom: 20px;">
-    Nominal refers to the RPM being in the green zone of the dial. Starting engines before the APU is fully spun up will lead to ignition failure. In the event of ignition failure, shut down both engines, and confirm APU RPM NOMINAL. Once NOMINAL, repeat steps 4 and 5.
+<div class="border-s-4 border-red-700 ps-4 mb-5">
+    Nominal refers to the RPM being in the green zone of the dial. Starting engines before the APU is fully spun up will lead to ignition failure. 
+    <br><br>
+    In the event of ignition failure, shut down both engines, and confirm APU RPM NOMINAL. Once NOMINAL, repeat steps 4 and 5.
 </div>
 
 <br>

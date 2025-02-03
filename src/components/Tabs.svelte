@@ -5,16 +5,19 @@
   import { emergencyChecklists } from '$lib/checklists'
 
   export let checklists: AircraftChecklists[];
+  const aircraftNames: string[] = ['F-45A', 'F/A-26B', 'EF-24G', 'AH-94', 'T-55']
+  const checklistTypes: string[] = ['global', 'info', 'important']
   let activeAircraft: string | null = null;
   let activeChecklist: Checklist | null = null;
   let markdownContent: string | Promise<string> | null = null;
   let referrer: {file: string, type: string | null} | null = null;
-  let globalPublicPages: ChecklistItem[] = checklists.find(checklist => checklist.aircraft === 'carrier')?.checklists || [];
+  let globalPagesArray: AircraftChecklists[] = checklists.filter(checklist => !aircraftNames.includes(checklist.aircraft)) || [];
+  let importantPages: ChecklistItem[] = globalPagesArray.filter(page => page.aircraft === 'global')[0].checklists.filter(checklist => checklist.type === 'important') || [];
   let emergencyRelatedChecklists: ChecklistItem[] = [];
   let emergenciesShowChecklists: EmergencyChecklist[] = [];
   let emergenciesHiddenChecklists: EmergencyChecklist[] = [];
   let secondTime:{ value: number, page: string | null, type: string | null } = { value: 0, page: null, type: null };
-
+  
   $: hasRelatedChecklists = !!(activeChecklist?.related?.length || (activeChecklist?.showEmergencies && emergencyChecklists.find(item => item.aircraft === activeAircraft)?.checklists?.length) || (activeAircraft && activeChecklist && activeChecklist.type === 'emergency'));
 
   const fetchMarkdown = async (file: string): Promise<string> => { 
@@ -26,7 +29,7 @@
         const text = await response.text();
         let html = await marked(text);
         html = html.replace(/<img([^>]*?)>/g, (match, attributes) => {
-          return `<img ${attributes} class="w-full" />`;
+          return `<img ${attributes} class="w-full h-auto" />`;
         });
         return html;
       } catch (error) {
@@ -88,6 +91,7 @@
     markdownContent = null;
     referrer = {file:'aircraft', type: null};
     filterHiddenEmergChecklists();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleChecklistClick = async (checklist: Checklist) => {
@@ -124,7 +128,7 @@
         break
       default:
         switch (true){
-          case (activeChecklist && activeChecklist.for === 'carrier'):
+          case (activeChecklist && (activeChecklist.for === 'carrier' || activeChecklist.for === 'global') ):
             referrer = {file: activeChecklist.file, type: activeChecklist.type}
           break
           default:
@@ -136,6 +140,9 @@
       activeChecklist = checklist
       markdownContent = await fetchMarkdown(checklist.file)
       filterHiddenEmergChecklists()
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 50)  
   };
 
   const handleEmergencyChecklistClick = async (checklist: EmergencyChecklist) => {
@@ -180,6 +187,9 @@
     activeChecklist = checklist;
     markdownContent = await fetchMarkdown(checklist.file);
     filterHiddenEmergChecklists()
+    setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 50) 
   };
 
   const handleGlobalPageClick = async (page: Checklist) => {
@@ -189,6 +199,9 @@
     activeChecklist = page;
     markdownContent = await fetchMarkdown(page.file);
     filterHiddenEmergChecklists()
+    setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 50) 
   };
 
   const handleBackClick = async () => {
@@ -276,6 +289,12 @@
                         filterHiddenEmergChecklists()
                         activeChecklist && (activeChecklist.type === 'emergency' || activeChecklist.type === 'emergency-page') ? filterEmergRelatedChecklists(activeChecklist) : null
                       } else {
+                        secondTime = {page: theList.file, type: theList.type, value: 0}
+                        activeAircraft ? referrer = {file: 'aircraft', type: null} : referrer = null
+                        activeChecklist = theList
+                        markdownContent = await fetchMarkdown(theList.file)
+                        filterHiddenEmergChecklists()
+                        activeChecklist && (activeChecklist.type === 'emergency' || activeChecklist.type === 'emergency-page') ? filterEmergRelatedChecklists(activeChecklist) : null
                       }
                       break
                     default:
@@ -358,7 +377,9 @@
       default:
         break
     }
-
+    setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 50) 
   };
 
   onMount(() => {
@@ -371,7 +392,7 @@
   {#if !activeAircraft && !activeChecklist}
     <!-- Aircraft selection -->
     <div class="flex space-x-4">
-      <div class="grid grid-cols-3 gap-4">
+      <div class="grid grid-cols-3 gap-4 mx-auto">
         {#each checklists as checklist}
         {#if checklist.hidden !== true}
         <button class="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white rounded h-70" on:click={() => handleAircraftClick(checklist.aircraft)}>
@@ -380,12 +401,14 @@
         {/if}  
         {/each}
         
-        {#each globalPublicPages as globalPage}
+        {#each globalPagesArray as globalPages}
+        {#each globalPages.checklists as globalPage}
         {#if globalPage.hidden !== true && globalPage.type === 'page' && globalPage.showGlobal }
         <button class="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded h-70" on:click={() => handleGlobalPageClick(globalPage)}>
           {globalPage.name}
         </button>
         {/if}  
+        {/each}
         {/each}
       </div>
     </div>
@@ -425,7 +448,7 @@
       <!-- Display Carrier Knowledge/Checklists -->
       <div class="flex flex-col space-y-2">
         {#each checklists as checklist}
-        {#if checklist.aircraft === 'carrier' }
+        {#if checklist.aircraft === 'carrier' || checklist.aircraft === 'global'}
           {#each checklist.checklists as subchecklist}
           {#if (subchecklist.type === 'global' && !subchecklist.hidden) || (subchecklist.type === 'page' && subchecklist.hidden)}
           <button class="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded" on:click={() => handleChecklistClick(subchecklist)}>
@@ -451,7 +474,7 @@
                   {@const match = relatedChecklist.file === relatedFile}
                   {#if match}
                     <button class="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded" on:click={() => handleChecklistClick(relatedChecklist)}>
-                      {relatedChecklist.type === 'global' || (relatedChecklist.type === 'page' && relatedChecklist.for !== 'aircraft') ? relatedChecklist.name : `${relatedChecklist.name} (${activeAircraft})`}
+                      { checklistTypes.includes(relatedChecklist.type) || (relatedChecklist.type === 'page' && relatedChecklist.for !== 'aircraft') ? relatedChecklist.name : `${relatedChecklist.name} (${activeAircraft})`}
                     </button>
                   {/if}
                 {/each}
@@ -501,4 +524,26 @@
     {/if}
    </div>  
   {/if}
+  <div>
+  <p class="flex justify-center mt-8 text-sm">This app is licensed under &nbsp;
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" class="flex items-center">
+      CC BY-NC-SA 4.0
+      <img class="!h-4 ms-1" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt="">
+      <img class="!h-4 ms-1" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt="">
+      <img class="!h-4 ms-1" src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1" alt="">
+      <img class="!h-4 ms-1" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt="">
+    </a>
+  </p>
+  {#if importantPages}
+  <div class="flex gap-3 justify-center">
+    {#each importantPages as importantPage}
+    <p>
+      <button class="text-sm" on:click={() => handleChecklistClick(importantPage)}>
+        {importantPage.name}
+      </button>
+    </p>
+    {/each}
+  </div>
+  {/if}
+</div>
 </div>

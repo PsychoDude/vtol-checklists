@@ -18,7 +18,7 @@
 
 > **NOTE:**
 
-<div style="border-left: 4px solid #a0e33b; padding-left: 15px; margin-bottom: 20px;">
+<div class="border-s-4 border-green-500 ps-4 mb-5">
     The carrier-capable landing gear is designed to withstand the harder landing forces involved, and due to the low clearance attempts to flare too aggressively may result in a tail strike.
 </div>
 
