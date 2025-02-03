@@ -309,6 +309,14 @@ export const checklists = [
 				showGlobal: true,
 				showEmergencies: false,
 			},
+			{
+				type: 'aircraft',
+				name: 'Weapons',
+				file: 'ef24-weapons.md',
+				hidden: false,
+				showGlobal: true,
+				showEmergencies: true,
+			},
 		],
 	},
 	{
