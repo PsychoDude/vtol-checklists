@@ -13,9 +13,9 @@
 
 ### **Air-to-Air:**
 
--   AIM-7: Medium - Semi-Active Radar Homing (B/B Safe) + HOJ
--   AIM-54: Medium-Long - Active Radar Homing
--   AIM-120D: 5-25nm - Advanced Active Radar Homing + HOJ + MADDOG
+-   AIM-7: Medium - SARH (B/B Safe) + HOJ
+-   AIM-54: Medium-Long - ARH
+-   AIM-120D: 5-25nm - Advanced ARH + HOJ + MADDOG
 
 <br>
 

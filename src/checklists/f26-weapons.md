@@ -25,8 +25,8 @@
 
 ### **Radar Display (Radar):**
 
--   AIM-7: Medium - Semi-Active Radar Homing (B/B Safe) + HOJ
--   AIM-120C: 5-25nm - Active Radar Homing + HOJ + MADDOG
+-   AIM-7: Medium - SARH (B/B Safe) + HOJ
+-   AIM-120C: 5-25nm - ARH + HOJ + MADDOG
 
 ### **Heat Seeker:**
 

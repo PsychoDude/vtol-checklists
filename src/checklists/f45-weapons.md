@@ -18,7 +18,7 @@
 
 ### **Air-to-Air:**
 
--   AIM-120D: 5-25nm - Advanced Active Radar Homing + HOJ + MADDOG
+-   AIM-120D: 5-25nm - Advanced ARH + HOJ + MADDOG
 
 <br>
 
